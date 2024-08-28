@@ -2,7 +2,17 @@
 
 # Aproximaciones desde la etnicidad.
 
-Repositorio del curso.
+La unidad de estudios cuantitativos del Centro de Estudios Interculturales e Indígenas (CIIR) invita a participar en el curso Procesamiento de Datos en R: *Aproximaciones desde la etnicidad.*
+
+El objetivo del curso es explorar sobre las diversas fuentes que contengan datos de minorías étnicas en Chile. El foco del curso estará puesto en:
+
+-   Relaciones interculturales.
+
+-   Visualización de datos
+
+-   Uso del CENSO y creación de mapas
+
+-   Análisis textual
 
 | Clase | Contenido                                                                                                 | Presentación | Código práctico | Referencias                                                                |
 |-----------------|--------------------|--|-----------------|------------------|
