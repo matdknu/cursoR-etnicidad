@@ -14,8 +14,10 @@ El objetivo del curso es explorar sobre las diversas fuentes que contengan datos
 
 -   Análisis textual
 
+Curso próximo a desarrollarse.
+
 | Clase | Contenido                                                                                                 | Presentación | Código práctico | Referencias                                                                |
-|-----------------|--------------------|--|-----------------|------------------|
+|-----------------|--------------------|-------------|-----------------|------------------|
 | 1     | Introducción a R                                                                                          |              |                 | [An Introduction to R](https://intro2r.com "An Introduction to R [Libro]") |
 | 2     | Introducción y procesamiento de la Encuesta CASEN                                                         |              |                 | [R For Data Science](https://r4ds.had.co.nz/ "R For Data Science")         |
 | 3     | Relaciones interculturales: Procesando la Encuesta la Encuesta Longitudinal de Relaciones Interculturales |              |                 | [R For Data Science](https://r4ds.had.co.nz/ "R For Data Science")         |
