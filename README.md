@@ -15,9 +15,9 @@ A lo largo del Seminario, los participantes aprenderán a aplicar metodologías 
 Inscripciones aquí:
 
 | Fecha | Contenido                                                                                       | Presentación | Código práctico | Packages           | Referencias                                                                                                               |
-|---------|-----------------------|---------|---------|---------|--------------|
-| 1     | Introducción a R                                                                                |              |                 |                    | [An Introduction to R](https://intro2r.com "An Introduction to R [Libro]")                                                |
-| 2     | Procesamiento de datos con Tidyverse                                                            |              |                 | Tidyverse          | [R For Data Science](https://r4ds.had.co.nz/ "R For Data Science")                                                        |
+|------------|----------------|------------|------------|------------|------------|
+| 1     | Introducción al uso de R: Procesamiento de datos con Tidyverse I                                |              |                 |                    | [An Introduction to R](https://intro2r.com "An Introduction to R [Libro]")                                                |
+| 2     | Introducción al uso de R: Procesamiento de datos con Tidyverse II                               |              |                 | Tidyverse          | [R For Data Science](https://r4ds.had.co.nz/ "R For Data Science")                                                        |
 | 3     | Visualizando interculturales: Procesando la Encuesta Longitudinal de Relaciones Interculturales |              |                 | Tidyverse, Ggplot2 | [R For Data Science](https://r4ds.had.co.nz/ "R For Data Science")                                                        |
 | 4     | ¿Cuántos somos? Uso del CENSO y creación de Mapas                                               |              |                 | ChileMapas, Censo  | [R For Data Science](https://r4ds.had.co.nz/ "R For Data Science")                                                        |
 | 5     | Procesamiento de Lenguaje Natural: Discursos presidenciales en Chile                            |              |                 | Quanteda           | [Text Mining with R](https://www.tidytextmining.com/)                                                                     |
