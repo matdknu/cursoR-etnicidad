@@ -1,20 +1,16 @@
-# ***InteRculturales: Ténicas de ciencias sociales computacionales desde la Etnicidad***
+# Seminario Cuantitativo.
 
-La unidad de estudios cuantitativos del Centro de Estudios Interculturales e Indígenas (CIIR) invita a participar en el curso abierto:
+# ***InteRculturales:** Técnicas de ciencias sociales computacionales desde la Etnicidad.*
+
+La unidad de estudios cuantitativos del Centro de Estudios Interculturales e Indígenas (CIIR) invita a participar en el seminario cuantitativo abierto:
 
 InteRculturales: Técnicas de ciencias sociales computacionales desde la Etnicidad.
 
-El objetivo del curso es explorar sobre las diversas fuentes que contengan datos sobre minorías étnicas y raciales en Chile y en el mundo. El foco del curso estará puesto en:
+El objetivo del Seminario es explorar diversas fuentes de datos sobre minorías étnicas y raciales en Chile y el mundo, integrando técnicas de ciencias sociales computacionales para abordar dinámicas interculturales.
 
--   Dinámicas interculturales.
+El foco estará puesto en el análisis de datos provenientes de censos y otras fuentes relevantes, con énfasis en el uso de herramientas de visualización y Sistemas de Información Geográfica (SIG) para mapear y contextualizar patrones de diversidad y desigualdad étnica. Asimismo, se trabajará en el análisis textual para explorar narrativas y discursos relacionados con etnicidad, discriminación y relaciones interculturales, utilizando bases de datos de encuestas, medios de comunicación y discursos presidenciales.
 
--   Visualización de datos
-
--   CENSO
-
--   Sistema de Información Geográfica
-
--   Análisis textual
+A lo largo del Seminario, los participantes aprenderán a aplicar metodologías innovadoras para procesar, analizar y comunicar resultados, integrando visualizaciones avanzadas en R que resalten las interacciones entre diferentes grupos étnicos, los sesgos presentes en los datos y las complejidades de las relaciones interculturales en diversos contextos.
 
 Inscripciones aquí:
 
@@ -39,9 +35,9 @@ Inscripciones aquí:
 +-------+-------------------------------------------------------------------------------------------------------------+--------------+-----------------+------------+----------------------------------------------------------------------------+
 | 7\.   | Webscrapping: Utilización de datos provenientes de la Web.                                                  |              |                 |            |                                                                            |
 +-------+-------------------------------------------------------------------------------------------------------------+--------------+-----------------+------------+----------------------------------------------------------------------------+
-| 8\.   | Aplicaciones Interactivas: Introducción a ShinyApp                                                          |              |                 |            | <https://mastering-shiny.org>                                              |
+| 8\.   | *Pronto*                                                                                                    |              |                 |            | <https://mastering-shiny.org>                                              |
 |       |                                                                                                             |              |                 |            |                                                                            |
 |       |                                                                                                             |              |                 |            | <https://shiny.posit.co/r/getstarted/shiny-basics/lesson1/>                |
 +-------+-------------------------------------------------------------------------------------------------------------+--------------+-----------------+------------+----------------------------------------------------------------------------+
-| 9\.   | Incorporación de la IA al análisis intercultural                                                            |              |                 |            |                                                                            |
+| 9\.   | *Pronto*                                                                                                    |              |                 |            |                                                                            |
 +-------+-------------------------------------------------------------------------------------------------------------+--------------+-----------------+------------+----------------------------------------------------------------------------+
