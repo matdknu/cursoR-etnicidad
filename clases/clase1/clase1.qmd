@@ -1,0 +1,39 @@
+---
+title: "Introducción a R" 
+subtitle: "Documento de trabajo"
+author: "Matías Deneken"
+date: today
+format:
+  html:
+    toc-title: "Contenidos"
+    theme: cosmo
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    include-in-header:
+      text: |
+        <style>
+          body::before {
+            content: url('img/ciir_en-negro-vertical.jpg');
+            display: block;
+            text-align: left;
+            margin-bottom: 5px; /* Reducido a 5px para un espacio mínimo */
+            transform: scale(0.5);
+          }
+          body::before img {
+            max-width: 100px;
+            height: auto;
+          }
+          #title-block-header {
+            margin-top: 0; /* Eliminado el margen superior */
+          }
+          .quarto-title {
+            margin-top: 0; /* Asegura que no haya espacio extra arriba del título */
+          }
+        </style>
+editor: visual
+reference-location: margin
+citation-location: margin
+---
+
+## Introducción
