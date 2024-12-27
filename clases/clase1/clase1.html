@@ -100,7 +100,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Contenidos</h2>
    
   <ul>
-  <li><a href="#introducción" id="toc-introducción" class="nav-link active" data-scroll-target="#introducción"><span class="header-section-number">1</span> Introducción</a></li>
+  <li><a href="#cargar-paquete-de-datos." id="toc-cargar-paquete-de-datos." class="nav-link active" data-scroll-target="#cargar-paquete-de-datos."><span class="header-section-number">1</span> Cargar paquete de datos.</a></li>
   </ul>
 </nav>
 </div>
@@ -138,8 +138,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="introducción" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="introducción"><span class="header-section-number">1</span> Introducción</h2>
+<section id="cargar-paquete-de-datos." class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="cargar-paquete-de-datos."><span class="header-section-number">1</span> Cargar paquete de datos.</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr) <span class="co"># manipulación de datos</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl) <span class="co"># carga de archivos Excel</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -547,13 +547,41 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(comuna)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 5 × 1
-  comuna    
-  &lt;chr&gt;     
-1 Punitaqui 
-2 O'Higgins 
-3 Curicó    
-4 Panquehue 
-5 Lago Ranco</code></pre>
+  comuna           
+  &lt;chr&gt;            
+1 Quinta de Tilcoco
+2 Copiapó          
+3 Empedrado        
+4 Mostazal         
+5 Huasco           </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>censo <span class="sc">|&gt;</span> </span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(region) <span class="sc">|&gt;</span> </span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_max</span>(población) <span class="sc">|&gt;</span> </span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(region, comuna, población)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 16 × 3
+# Groups:   region [16]
+   region                                    comuna       población
+   &lt;chr&gt;                                     &lt;chr&gt;            &lt;dbl&gt;
+ 1 Antofagasta                               Antofagasta     444276
+ 2 Arica y Parinacota                        Arica           257163
+ 3 Atacama                                   Copiapó         176100
+ 4 Aysén del General Carlos Ibáñez del Campo Coyhaique        62046
+ 5 Biobío                                    Concepción      239776
+ 6 Coquimbo                                  Coquimbo        275644
+ 7 La Araucanía                              Temuco          309696
+ 8 Libertador General Bernardo O'Higgins     Rancagua        274407
+ 9 Los Lagos                                 Puerto Montt    280955
+10 Los Ríos                                  Valdivia        182086
+11 Magallanes y de la Antártica Chilena      Punta Arenas    145713
+12 Maule                                     Talca           242344
+13 Metropolitana de Santiago                 Puente Alto     667904
+14 Tarapacá                                  Iquique         231962
+15 Valparaíso                                Viña del Mar    371490
+16 Ñuble                                     Chillán         204091</code></pre>
 </div>
 </div>
 </section>
