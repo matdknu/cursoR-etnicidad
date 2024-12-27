@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Matías Deneken">
-<meta name="dcterms.date" content="2024-12-23">
+<meta name="dcterms.date" content="2024-12-27">
 
 <title>Introducción a R</title>
 <style>
@@ -21,6 +21,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -92,7 +126,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">December 23, 2024</p>
+      <p class="date">December 27, 2024</p>
     </div>
   </div>
   
@@ -106,6 +140,422 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="introducción" class="level2" data-number="1">
 <h2 data-number="1" class="anchored" data-anchor-id="introducción"><span class="header-section-number">1</span> Introducción</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr) <span class="co"># manipulación de datos</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl) <span class="co"># carga de archivos Excel</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>censo <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"bbdd/censo_proyeccion_2024.xlsx"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>censo</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 346 × 7
+   cut_region region      cut_provincia provincia   cut_comuna comuna  población
+        &lt;dbl&gt; &lt;chr&gt;               &lt;dbl&gt; &lt;chr&gt;            &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;
+ 1          1 Tarapacá               11 Iquique           1101 Iquique    231962
+ 2          1 Tarapacá               11 Iquique           1107 Alto H…    143294
+ 3          1 Tarapacá               14 Tamarugal         1401 Pozo A…     18713
+ 4          1 Tarapacá               14 Tamarugal         1402 Camiña       1374
+ 5          1 Tarapacá               14 Tamarugal         1403 Colcha…      1558
+ 6          1 Tarapacá               14 Tamarugal         1404 Huara        3095
+ 7          1 Tarapacá               14 Tamarugal         1405 Pica         6291
+ 8          2 Antofagasta            21 Antofagasta       2101 Antofa…    444276
+ 9          2 Antofagasta            21 Antofagasta       2102 Mejill…     15877
+10          2 Antofagasta            21 Antofagasta       2103 Sierra…      1800
+# ℹ 336 more rows</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(censo, <span class="at">n =</span> <span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 346 × 7
+   cut_region region      cut_provincia provincia   cut_comuna comuna  población
+        &lt;dbl&gt; &lt;chr&gt;               &lt;dbl&gt; &lt;chr&gt;            &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;
+ 1          1 Tarapacá               11 Iquique           1101 Iquique    231962
+ 2          1 Tarapacá               11 Iquique           1107 Alto H…    143294
+ 3          1 Tarapacá               14 Tamarugal         1401 Pozo A…     18713
+ 4          1 Tarapacá               14 Tamarugal         1402 Camiña       1374
+ 5          1 Tarapacá               14 Tamarugal         1403 Colcha…      1558
+ 6          1 Tarapacá               14 Tamarugal         1404 Huara        3095
+ 7          1 Tarapacá               14 Tamarugal         1405 Pica         6291
+ 8          2 Antofagasta            21 Antofagasta       2101 Antofa…    444276
+ 9          2 Antofagasta            21 Antofagasta       2102 Mejill…     15877
+10          2 Antofagasta            21 Antofagasta       2103 Sierra…      1800
+11          2 Antofagasta            21 Antofagasta       2104 Taltal      13967
+12          2 Antofagasta            22 El Loa            2201 Calama     196152
+13          2 Antofagasta            22 El Loa            2202 Ollagüe       269
+14          2 Antofagasta            22 El Loa            2203 San Pe…     11030
+15          2 Antofagasta            23 Tocopilla         2301 Tocopi…     28354
+16          2 Antofagasta            23 Tocopilla         2302 María …      6507
+17          3 Atacama                31 Copiapó           3101 Copiapó    176100
+18          3 Atacama                31 Copiapó           3102 Caldera     19964
+19          3 Atacama                31 Copiapó           3103 Tierra…     14431
+20          3 Atacama                32 Chañaral          3201 Chañar…     13017
+# ℹ 326 more rows</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>censo <span class="sc">|&gt;</span> <span class="co"># comando + shift + M</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(comuna, población)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 346 × 2
+   comuna        población
+   &lt;chr&gt;             &lt;dbl&gt;
+ 1 Iquique          231962
+ 2 Alto Hospicio    143294
+ 3 Pozo Almonte      18713
+ 4 Camiña             1374
+ 5 Colchane           1558
+ 6 Huara              3095
+ 7 Pica               6291
+ 8 Antofagasta      444276
+ 9 Mejillones        15877
+10 Sierra Gorda       1800
+# ℹ 336 more rows</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>censo <span class="sc">|&gt;</span> </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>cut_provincia, <span class="sc">-</span>cut_comuna, <span class="sc">-</span>cut_region)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 346 × 4
+   region      provincia   comuna        población
+   &lt;chr&gt;       &lt;chr&gt;       &lt;chr&gt;             &lt;dbl&gt;
+ 1 Tarapacá    Iquique     Iquique          231962
+ 2 Tarapacá    Iquique     Alto Hospicio    143294
+ 3 Tarapacá    Tamarugal   Pozo Almonte      18713
+ 4 Tarapacá    Tamarugal   Camiña             1374
+ 5 Tarapacá    Tamarugal   Colchane           1558
+ 6 Tarapacá    Tamarugal   Huara              3095
+ 7 Tarapacá    Tamarugal   Pica               6291
+ 8 Antofagasta Antofagasta Antofagasta      444276
+ 9 Antofagasta Antofagasta Mejillones        15877
+10 Antofagasta Antofagasta Sierra Gorda       1800
+# ℹ 336 more rows</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>censo <span class="sc">|&gt;</span> </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">contains</span>(<span class="st">"cut"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 346 × 4
+   region      provincia   comuna        población
+   &lt;chr&gt;       &lt;chr&gt;       &lt;chr&gt;             &lt;dbl&gt;
+ 1 Tarapacá    Iquique     Iquique          231962
+ 2 Tarapacá    Iquique     Alto Hospicio    143294
+ 3 Tarapacá    Tamarugal   Pozo Almonte      18713
+ 4 Tarapacá    Tamarugal   Camiña             1374
+ 5 Tarapacá    Tamarugal   Colchane           1558
+ 6 Tarapacá    Tamarugal   Huara              3095
+ 7 Tarapacá    Tamarugal   Pica               6291
+ 8 Antofagasta Antofagasta Antofagasta      444276
+ 9 Antofagasta Antofagasta Mejillones        15877
+10 Antofagasta Antofagasta Sierra Gorda       1800
+# ℹ 336 more rows</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>censo <span class="sc">|&gt;</span> </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, población)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 346 × 4
+   cut_region region      cut_provincia población
+        &lt;dbl&gt; &lt;chr&gt;               &lt;dbl&gt;     &lt;dbl&gt;
+ 1          1 Tarapacá               11    231962
+ 2          1 Tarapacá               11    143294
+ 3          1 Tarapacá               14     18713
+ 4          1 Tarapacá               14      1374
+ 5          1 Tarapacá               14      1558
+ 6          1 Tarapacá               14      3095
+ 7          1 Tarapacá               14      6291
+ 8          2 Antofagasta            21    444276
+ 9          2 Antofagasta            21     15877
+10          2 Antofagasta            21      1800
+# ℹ 336 more rows</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>censo <span class="sc">|&gt;</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(población) <span class="sc">|&gt;</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(comuna, población)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 346 × 2
+   comuna        población
+   &lt;chr&gt;             &lt;dbl&gt;
+ 1 Antártica           151
+ 2 Río Verde           205
+ 3 Laguna Blanca       248
+ 4 Ollagüe             269
+ 5 Timaukel            276
+ 6 Tortel              585
+ 7 San Gregorio        651
+ 8 Primavera           674
+ 9 O'Higgins           675
+10 General Lagos       801
+# ℹ 336 more rows</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>censo <span class="sc">|&gt;</span> </span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(población)) <span class="sc">|&gt;</span> </span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(region, comuna, población)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 346 × 3
+   region                    comuna       población
+   &lt;chr&gt;                     &lt;chr&gt;            &lt;dbl&gt;
+ 1 Metropolitana de Santiago Puente Alto     667904
+ 2 Metropolitana de Santiago Maipú           586812
+ 3 Metropolitana de Santiago Santiago        544388
+ 4 Antofagasta               Antofagasta     444276
+ 5 Metropolitana de Santiago La Florida      407297
+ 6 Valparaíso                Viña del Mar    371490
+ 7 Metropolitana de Santiago San Bernardo    348640
+ 8 Metropolitana de Santiago Las Condes      343632
+ 9 Valparaíso                Valparaíso      320816
+10 La Araucanía              Temuco          309696
+# ℹ 336 more rows</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>censo <span class="sc">|&gt;</span> </span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(region, <span class="fu">desc</span>(población)) <span class="sc">|&gt;</span> </span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(region, comuna, población) <span class="sc">|&gt;</span> </span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="at">n =</span> <span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 346 × 3
+   region             comuna               población
+   &lt;chr&gt;              &lt;chr&gt;                    &lt;dbl&gt;
+ 1 Antofagasta        Antofagasta             444276
+ 2 Antofagasta        Calama                  196152
+ 3 Antofagasta        Tocopilla                28354
+ 4 Antofagasta        Mejillones               15877
+ 5 Antofagasta        Taltal                   13967
+ 6 Antofagasta        San Pedro de Atacama     11030
+ 7 Antofagasta        María Elena               6507
+ 8 Antofagasta        Sierra Gorda              1800
+ 9 Antofagasta        Ollagüe                    269
+10 Arica y Parinacota Arica                   257163
+11 Arica y Parinacota Putre                     2569
+12 Arica y Parinacota Camarones                 1246
+13 Arica y Parinacota General Lagos              801
+14 Atacama            Copiapó                 176100
+15 Atacama            Vallenar                 57360
+16 Atacama            Caldera                  19964
+17 Atacama            Tierra Amarilla          14431
+18 Atacama            Diego de Almagro         13909
+19 Atacama            Chañaral                 13017
+20 Atacama            Huasco                   11590
+# ℹ 326 more rows</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>censo <span class="sc">|&gt;</span> <span class="fu">filter</span>(comuna <span class="sc">==</span> <span class="st">"Providencia"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 7
+  cut_region region          cut_provincia provincia cut_comuna comuna población
+       &lt;dbl&gt; &lt;chr&gt;                   &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt;
+1         13 Metropolitana …           131 Santiago       13123 Provi…    164009</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>censo <span class="sc">|&gt;</span> <span class="fu">filter</span>(comuna <span class="sc">!=</span> <span class="st">"Alto Hospicio"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 345 × 7
+   cut_region region      cut_provincia provincia   cut_comuna comuna  población
+        &lt;dbl&gt; &lt;chr&gt;               &lt;dbl&gt; &lt;chr&gt;            &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;
+ 1          1 Tarapacá               11 Iquique           1101 Iquique    231962
+ 2          1 Tarapacá               14 Tamarugal         1401 Pozo A…     18713
+ 3          1 Tarapacá               14 Tamarugal         1402 Camiña       1374
+ 4          1 Tarapacá               14 Tamarugal         1403 Colcha…      1558
+ 5          1 Tarapacá               14 Tamarugal         1404 Huara        3095
+ 6          1 Tarapacá               14 Tamarugal         1405 Pica         6291
+ 7          2 Antofagasta            21 Antofagasta       2101 Antofa…    444276
+ 8          2 Antofagasta            21 Antofagasta       2102 Mejill…     15877
+ 9          2 Antofagasta            21 Antofagasta       2103 Sierra…      1800
+10          2 Antofagasta            21 Antofagasta       2104 Taltal      13967
+# ℹ 335 more rows</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>censo <span class="sc">|&gt;</span> <span class="fu">filter</span>(población <span class="sc">&gt;</span> <span class="dv">300000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 7
+   cut_region region         cut_provincia provincia cut_comuna comuna población
+        &lt;dbl&gt; &lt;chr&gt;                  &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt;
+ 1          2 Antofagasta               21 Antofaga…       2101 Antof…    444276
+ 2          5 Valparaíso                51 Valparaí…       5101 Valpa…    320816
+ 3          5 Valparaíso                51 Valparaí…       5109 Viña …    371490
+ 4          9 La Araucanía              91 Cautín          9101 Temuco    309696
+ 5         13 Metropolitana…           131 Santiago       13101 Santi…    544388
+ 6         13 Metropolitana…           131 Santiago       13110 La Fl…    407297
+ 7         13 Metropolitana…           131 Santiago       13114 Las C…    343632
+ 8         13 Metropolitana…           131 Santiago       13119 Maipú     586812
+ 9         13 Metropolitana…           132 Cordille…      13201 Puent…    667904
+10         13 Metropolitana…           134 Maipo          13401 San B…    348640</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>censo <span class="sc">|&gt;</span> </span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(población <span class="sc">&lt;</span> <span class="dv">1000</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(comuna, población) <span class="sc">|&gt;</span> </span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(población)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 11 × 2
+   comuna        población
+   &lt;chr&gt;             &lt;dbl&gt;
+ 1 Antártica           151
+ 2 Río Verde           205
+ 3 Laguna Blanca       248
+ 4 Ollagüe             269
+ 5 Timaukel            276
+ 6 Tortel              585
+ 7 San Gregorio        651
+ 8 Primavera           674
+ 9 O'Higgins           675
+10 General Lagos       801
+11 Lago Verde          914</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>censo <span class="sc">|&gt;</span> </span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(población <span class="sc">==</span> <span class="fu">min</span>(población)) <span class="sc">|&gt;</span> </span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(region, comuna, provincia, población)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 4
+  region                               comuna    provincia         población
+  &lt;chr&gt;                                &lt;chr&gt;     &lt;chr&gt;                 &lt;dbl&gt;
+1 Magallanes y de la Antártica Chilena Antártica Antártica Chilena       151</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>censo <span class="sc">|&gt;</span> </span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(población <span class="sc">&gt;=</span> <span class="fu">mean</span>(población)) <span class="sc">|&gt;</span> </span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(region, comuna, provincia, población)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 84 × 4
+   region      comuna        provincia   población
+   &lt;chr&gt;       &lt;chr&gt;         &lt;chr&gt;           &lt;dbl&gt;
+ 1 Tarapacá    Iquique       Iquique        231962
+ 2 Tarapacá    Alto Hospicio Iquique        143294
+ 3 Antofagasta Antofagasta   Antofagasta    444276
+ 4 Antofagasta Calama        El Loa         196152
+ 5 Atacama     Copiapó       Copiapó        176100
+ 6 Coquimbo    La Serena     Elqui          267400
+ 7 Coquimbo    Coquimbo      Elqui          275644
+ 8 Coquimbo    Ovalle        Limarí         124401
+ 9 Valparaíso  Valparaíso    Valparaíso     320816
+10 Valparaíso  Viña del Mar  Valparaíso     371490
+# ℹ 74 more rows</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>min_pob <span class="ot">&lt;-</span> <span class="dv">25000</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>max_pob <span class="ot">&lt;-</span> <span class="dv">30000</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>censo <span class="sc">|&gt;</span> </span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(población <span class="sc">&gt;</span> min_pob,</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>         población <span class="sc">&lt;</span> max_pob) <span class="sc">|&gt;</span> </span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(población, comuna, provincia, region)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 16 × 4
+   población comuna     provincia   region                                   
+       &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;                                    
+ 1     28354 Tocopilla  Tocopilla   Antofagasta                              
+ 2     29916 Salamanca  Choapa      Coquimbo                                 
+ 3     27898 La Cruz    Quillota    Valparaíso                               
+ 4     27065 Cartagena  San Antonio Valparaíso                               
+ 5     27286 Llaillay   San Felipe  Valparaíso                               
+ 6     27749 Las Cabras Cachapoal   Libertador General Bernardo O'Higgins    
+ 7     28552 Mostazal   Cachapoal   Libertador General Bernardo O'Higgins    
+ 8     26746 Hualqui    Concepción  Biobío                                   
+ 9     27152 Lebu       Arauco      Biobío                                   
+10     28028 Nacimiento Bíobío      Biobío                                   
+11     25515 Carahue    Cautín      La Araucanía                             
+12     25488 Freire     Cautín      La Araucanía                             
+13     26617 Pitrufquen Cautín      La Araucanía                             
+14     26558 Collipulli Malleco     La Araucanía                             
+15     25218 Aysén      Aysén       Aysén del General Carlos Ibáñez del Campo
+16     29067 Coihueco   Punilla     Ñuble                                    </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>promedio <span class="ot">&lt;-</span> <span class="fu">mean</span>(censo<span class="sc">$</span>población)</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>censo <span class="sc">|&gt;</span> </span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(población <span class="sc">&gt;</span> promedio)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 84 × 7
+   cut_region region      cut_provincia provincia   cut_comuna comuna  población
+        &lt;dbl&gt; &lt;chr&gt;               &lt;dbl&gt; &lt;chr&gt;            &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;
+ 1          1 Tarapacá               11 Iquique           1101 Iquique    231962
+ 2          1 Tarapacá               11 Iquique           1107 Alto H…    143294
+ 3          2 Antofagasta            21 Antofagasta       2101 Antofa…    444276
+ 4          2 Antofagasta            22 El Loa            2201 Calama     196152
+ 5          3 Atacama                31 Copiapó           3101 Copiapó    176100
+ 6          4 Coquimbo               41 Elqui             4101 La Ser…    267400
+ 7          4 Coquimbo               41 Elqui             4102 Coquim…    275644
+ 8          4 Coquimbo               43 Limarí            4301 Ovalle     124401
+ 9          5 Valparaíso             51 Valparaíso        5101 Valpar…    320816
+10          5 Valparaíso             51 Valparaíso        5109 Viña d…    371490
+# ℹ 74 more rows</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>censo <span class="sc">|&gt;</span> </span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">200</span><span class="sc">:</span><span class="dv">220</span>) <span class="co"># filas del 200 al 220</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 21 × 7
+   cut_region region       cut_provincia provincia  cut_comuna comuna  población
+        &lt;dbl&gt; &lt;chr&gt;                &lt;dbl&gt; &lt;chr&gt;           &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;
+ 1          9 La Araucanía            92 Malleco          9205 Lonqui…     11109
+ 2          9 La Araucanía            92 Malleco          9206 Los Sa…      7468
+ 3          9 La Araucanía            92 Malleco          9207 Lumaco       9916
+ 4          9 La Araucanía            92 Malleco          9208 Purén       12103
+ 5          9 La Araucanía            92 Malleco          9209 Renaico     11002
+ 6          9 La Araucanía            92 Malleco          9210 Traigu…     19260
+ 7          9 La Araucanía            92 Malleco          9211 Victor…     35554
+ 8         10 Los Lagos              101 Llanquihue      10101 Puerto…    280955
+ 9         10 Los Lagos              101 Llanquihue      10102 Calbuco     37626
+10         10 Los Lagos              101 Llanquihue      10103 Cochamó      3947
+# ℹ 11 more rows</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>censo <span class="sc">|&gt;</span> </span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_max</span>(población)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 7
+  cut_region region          cut_provincia provincia cut_comuna comuna población
+       &lt;dbl&gt; &lt;chr&gt;                   &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt;
+1         13 Metropolitana …           132 Cordille…      13201 Puent…    667904</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>censo <span class="sc">|&gt;</span> </span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_min</span>(población)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 7
+  cut_region region          cut_provincia provincia cut_comuna comuna población
+       &lt;dbl&gt; &lt;chr&gt;                   &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt;
+1         12 Magallanes y d…           122 Antártic…      12202 Antár…       151</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>censo <span class="sc">|&gt;</span> </span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_sample</span>(<span class="at">n =</span> <span class="dv">5</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(comuna)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 1
+  comuna    
+  &lt;chr&gt;     
+1 Punitaqui 
+2 O'Higgins 
+3 Curicó    
+4 Panquehue 
+5 Lago Ranco</code></pre>
+</div>
+</div>
 </section>
 
 </main>
