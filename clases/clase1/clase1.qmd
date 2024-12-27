@@ -169,3 +169,11 @@ censo |>
   select(comuna)
 ```
 
+```{r}
+censo |> 
+  group_by(region) |> 
+  slice_max(población) |> 
+  select(region, comuna, población)
+```
+
+
