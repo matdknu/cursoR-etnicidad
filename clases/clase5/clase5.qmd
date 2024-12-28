@@ -36,9 +36,15 @@ reference-location: margin
 citation-location: margin
 ---
 
+```{r setup, include=FALSE}
+rm(list=ls())
+options(warn = -1)  # Ocultar warnings
+options(message = FALSE)  # Ocultar mensajes
+```
+
 # Introducción a ChileMapas
 
-#### Cargar paquetes 
+#### Cargar paquetes
 
 ```{r}
 library(chilemapas) # mapas de chile
