@@ -36,9 +36,9 @@ reference-location: margin
 citation-location: margin
 ---
 
-## Cargar paquete de datos.
+# Introducción a ChileMapas
 
-
+#### Cargar paquetes 
 
 ```{r}
 library(chilemapas) # mapas de chile
@@ -48,9 +48,7 @@ library(scales) # utilidad para visualización de datos
 library(sf) # manipulación de datos geográficos
 ```
 
-
 #### Chile Mapas
-
 
 ```{r}
 mapa_comunas <- chilemapas::mapa_comunas
@@ -97,7 +95,7 @@ grafico_regiones +
   theme_classic()
 ```
 
-Necesitamos los nombres, por lo que los pegamos. Una opción puede es obtener datos de Wikipedia con funciones de Webscrapping. 
+Necesitamos los nombres, por lo que los pegamos. Una opción puede es obtener datos de Wikipedia con funciones de Webscrapping.
 
 ```{r}
 library(rvest)
@@ -114,7 +112,6 @@ tabla[[1]]
 ```
 
 Se realiza el respectivo procesamiento.
-
 
 ```{r}
 library(janitor)
@@ -138,7 +135,6 @@ datos_comunas <- tabla[[1]] |>
 
 datos_comunas
 ```
-
 
 ```{r}
 mapa_comunas_2 <- mapa_comunas |> 
@@ -197,7 +193,6 @@ mapa_comunas_filtro |>
   theme(legend.key.width = unit(3, "mm")) +
   theme(axis.title = element_blank())
 ```
-
 
 ```{r}
 library(rvest)
@@ -269,10 +264,12 @@ mapa_regiones_2 |>
   theme(legend.key.width = unit(3, "mm"))
 ```
 
-## Encuesta Longitudinal de Relaciones Interculturales (ELRI)
+# Censo 2017
 
+# Encuesta Longitudinal de Relaciones Interculturales (ELRI)
 
 Carga de datos
+
 ```{r}
 library(haven)
 library(ggrepel)
@@ -327,9 +324,7 @@ datos_arica <- mapa_datos_2 |> filter(nombre_comuna == "Arica"| nombre_comuna ==
                                       nombre_comuna == "Tierra Amarilla")
 ```
 
-
 Visualización del mapa
-
 
 ```{r plot-map}
 g1 <- mapa_datos_2 |> 
@@ -356,7 +351,3 @@ g1 <- mapa_datos_2 |>
 
 g1
 ```
-
-
-
-
