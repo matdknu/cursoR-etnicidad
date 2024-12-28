@@ -39,6 +39,7 @@ citation-location: margin
 ## Cargar paquete de datos.
 
 
+
 ```{r}
 library(chilemapas) # mapas de chile
 library(dplyr) # manipulación de datos
@@ -46,6 +47,10 @@ library(ggplot2) # visualización de datos
 library(scales) # utilidad para visualización de datos
 library(sf) # manipulación de datos geográficos
 ```
+
+
+#### Chile Mapas
+
 
 ```{r}
 mapa_comunas <- chilemapas::mapa_comunas
@@ -69,6 +74,8 @@ grafico_comunas +
   theme_classic()
 ```
 
+Gráficos a nivel nacional
+
 ```{r}
 mapa_regiones <- mapa_comunas |> 
   group_by(codigo_region) |> 
@@ -76,6 +83,8 @@ mapa_regiones <- mapa_comunas |>
 
 mapa_regiones
 ```
+
+Gráficos a nivel regional.
 
 ```{r}
 grafico_regiones <- mapa_regiones |> 
@@ -87,6 +96,8 @@ grafico_regiones <- mapa_regiones |>
 grafico_regiones +
   theme_classic()
 ```
+
+Necesitamos los nombres, por lo que los pegamos. Una opción puede es obtener datos de Wikipedia con funciones de Webscrapping. 
 
 ```{r}
 library(rvest)
@@ -101,6 +112,9 @@ tabla <- session(url) |>
 
 tabla[[1]]
 ```
+
+Se realiza el respectivo procesamiento.
+
 
 ```{r}
 library(janitor)
@@ -125,22 +139,6 @@ datos_comunas <- tabla[[1]] |>
 datos_comunas
 ```
 
-
-```{r}
-tabla_a <- tribble(~animal,   ~favorito, 
-                   "gato",    "pescado", 
-                   "mapache", "basura",
-                   "perro",   "carne")
-
-tabla_b <- tribble(~animal,   ~belleza, ~inteligencia, ~carisma,
-                   "gato",    8,        6,             5,
-                   "perro",   5,        2,             8,
-                   "mapache", 10,       7,             2)
-
-left_join(tabla_a, 
-          tabla_b, 
-          by = "animal")
-```
 
 ```{r}
 mapa_comunas_2 <- mapa_comunas |> 
@@ -270,4 +268,95 @@ mapa_regiones_2 |>
   coord_sf(expand = F, xlim = c(-77, -65)) + # recortar coordenadas
   theme(legend.key.width = unit(3, "mm"))
 ```
+
+## Encuesta Longitudinal de Relaciones Interculturales (ELRI)
+
+
+Carga de datos
+```{r}
+library(haven)
+library(ggrepel)
+
+
+elri <- read_dta("/Users/matdknu/Dropbox/CIIR/Encuesta-ELRI/BBDD/BBDD_ELRI_LONG_4.0.dta")
+```
+
+Procesamiento de datos
+
+```{r data-processing}
+elri_mapa <- elri |> 
+  select(comuna) |> 
+  rename(codigo_comuna = comuna) |> 
+  count(codigo_comuna)
+
+mapa <- chilemapas::mapa_comunas |> 
+  left_join(
+    chilemapas::codigos_territoriales |> 
+      select(matches("comuna")), 
+    by = "codigo_comuna")
+
+# Asegúrate de que la variable sea de tipo carácter para preservar los ceros a la izquierda
+elri_mapa$codigo_comuna <- as.character(elri_mapa$codigo_comuna)
+
+# Añadir un 0 al principio cuando el código tenga 4 dígitos
+elri_mapa$codigo_comuna <- ifelse(nchar(elri_mapa$codigo_comuna) == 4, 
+                                  paste0("0", elri_mapa$codigo_comuna), 
+                                  elri_mapa$codigo_comuna)
+
+mapa_datos_2 <- mapa |> 
+  left_join(elri_mapa, by = "codigo_comuna") 
+
+mapa_datos_2$n[is.na(mapa_datos_2$n)] <- 0
+
+mapa_datos_2 <- mapa_datos_2 |> 
+  mutate(dummy = if_else(n == 0, "Comuna NO encuestada", "Comuna encuestada"))
+
+# Calcular las coordenadas y filtrar fuera de geom_text_repel
+mapa_datos_2 <- mapa_datos_2 |> 
+  filter(nombre_comuna != "Isla de Pascua", nombre_comuna != "Juan Fernandez") |> 
+  mutate(centroid = st_centroid(geometry)) |> 
+  mutate(x = st_coordinates(centroid)[,1], y = st_coordinates(centroid)[,2])
+
+```
+
+```{r}
+# Filtrar las comunas que necesitas
+datos_arica <- mapa_datos_2 |> filter(nombre_comuna == "Arica"| nombre_comuna == "Santiago"| 
+                                      nombre_comuna == "Temuco" | nombre_comuna == "Punta Arenas"|
+                                      nombre_comuna == "Antofagasta" |
+                                      nombre_comuna == "Tierra Amarilla")
+```
+
+
+Visualización del mapa
+
+
+```{r plot-map}
+g1 <- mapa_datos_2 |> 
+  ggplot() +
+  geom_sf(aes(geometry = geometry, fill = dummy)) +
+  geom_text_repel(data = datos_arica, 
+                  aes(x = x, y = y, label = nombre_comuna),
+                  size = 3,
+                  nudge_x = -10,  # Aumenta la distancia hacia la izquierda
+                  hjust = 1,      # Alinea las etiquetas a la izquierda
+                  direction = "y",  # Mantiene las etiquetas en la misma línea vertical
+                  max.overlaps = Inf,  # Permite que todas las etiquetas se muestren
+                  force = 5,       # Aumenta la fuerza de repulsión para evitar el traslape
+                  box.padding = 0.5,  # Espaciado adicional entre las etiquetas
+                  segment.color = "black",  # Color de las líneas
+                  segment.size = 0.5,  # Tamaño de las líneas
+                  segment.curvature = 0,  # Mantiene las líneas rectas
+                  segment.ncp = 1,  # Número de puntos de control para la curva
+                  segment.angle = 180  # Ángulo para las líneas rectas hacia la izquierda
+  )  + 
+  scale_fill_manual(values = c("Comuna encuestada" = "grey", "Comuna NO encuestada" = "white"))  + 
+  theme_void() +
+  theme(legend.position = "none")  # Para eliminar la leyenda, si no la quieres
+
+g1
+```
+
+
+
 
