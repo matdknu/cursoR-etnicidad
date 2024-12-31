@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Matías Deneken">
-<meta name="dcterms.date" content="2024-12-28">
+<meta name="dcterms.date" content="2024-12-31">
 
-<title>Mapas en R</title>
+<title>Mapas y Censo 2017 en R</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -110,7 +110,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Mapas en R</h1>
+<h1 class="title">Mapas y Censo 2017 en R</h1>
 <p class="subtitle lead">InteRculturales</p>
 </div>
 
@@ -128,7 +128,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">December 28, 2024</p>
+      <p class="date">December 31, 2024</p>
     </div>
   </div>
   
@@ -145,43 +145,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="cargar-paquetes" class="level4" data-number="1.0.0.1">
 <h4 data-number="1.0.0.1" class="anchored" data-anchor-id="cargar-paquetes"><span class="header-section-number">1.0.0.1</span> Cargar paquetes</h4>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(chilemapas) <span class="co"># mapas de chile</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Loading required package: sf</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Linking to GEOS 3.11.0, GDAL 3.5.3, PROJ 9.1.0; sf_use_s2() is TRUE</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>La documentacion del paquete y ejemplos de uso se encuentran en https://pacha.dev/chilemapas/.
-Visita https://buymeacoffee.com/pacha/ si deseas donar para contribuir al desarrollo de este software.</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr) <span class="co"># manipulación de datos</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'dplyr'</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following objects are masked from 'package:stats':
-
-    filter, lag</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following objects are masked from 'package:base':
-
-    intersect, setdiff, setequal, union</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2) <span class="co"># visualización de datos</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(scales) <span class="co"># utilidad para visualización de datos</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf) <span class="co"># manipulación de datos geográficos</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(chilemapas) <span class="co"># mapas de chile</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr) <span class="co"># manipulación de datos</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2) <span class="co"># visualización de datos</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(scales) <span class="co"># utilidad para visualización de datos</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf) <span class="co"># manipulación de datos geográficos</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="chile-mapas" class="level4" data-number="1.0.0.2">
 <h4 data-number="1.0.0.2" class="anchored" data-anchor-id="chile-mapas"><span class="header-section-number">1.0.0.2</span> Chile Mapas</h4>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>mapa_comunas <span class="ot">&lt;-</span> chilemapas<span class="sc">::</span>mapa_comunas</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>mapa_comunas</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>mapa_comunas <span class="ot">&lt;-</span> chilemapas<span class="sc">::</span>mapa_comunas</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>mapa_comunas</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 345 × 4
    codigo_comuna codigo_provincia codigo_region                         geometry
@@ -200,13 +176,13 @@ Attaching package: 'dplyr'</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>grafico_comunas <span class="ot">&lt;-</span> mapa_comunas <span class="sc">|&gt;</span> </span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_set_geometry</span>(mapa_comunas<span class="sc">$</span>geometry) <span class="sc">|&gt;</span> <span class="co"># asignar geometría</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> <span class="co"># gráfico</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>() <span class="co"># capa geométrica</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>grafico_comunas <span class="sc">+</span></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>grafico_comunas <span class="ot">&lt;-</span> mapa_comunas <span class="sc">|&gt;</span> </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_set_geometry</span>(mapa_comunas<span class="sc">$</span>geometry) <span class="sc">|&gt;</span> <span class="co"># asignar geometría</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> <span class="co"># gráfico</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>() <span class="co"># capa geométrica</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>grafico_comunas <span class="sc">+</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -216,9 +192,9 @@ Attaching package: 'dplyr'</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>grafico_comunas <span class="sc">+</span> </span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">77</span>, <span class="sc">-</span><span class="dv">65</span>)) <span class="sc">+</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>grafico_comunas <span class="sc">+</span> </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">77</span>, <span class="sc">-</span><span class="dv">65</span>)) <span class="sc">+</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -229,11 +205,11 @@ Attaching package: 'dplyr'</code></pre>
 </div>
 <p>Gráficos a nivel nacional</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>mapa_regiones <span class="ot">&lt;-</span> mapa_comunas <span class="sc">|&gt;</span> </span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(codigo_region) <span class="sc">|&gt;</span> </span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">geometry =</span> <span class="fu">st_union</span>(geometry)) <span class="co"># resumir los datos agrupados uniéndolos</span></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>mapa_regiones</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>mapa_regiones <span class="ot">&lt;-</span> mapa_comunas <span class="sc">|&gt;</span> </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(codigo_region) <span class="sc">|&gt;</span> </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">geometry =</span> <span class="fu">st_union</span>(geometry)) <span class="co"># resumir los datos agrupados uniéndolos</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>mapa_regiones</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 16 × 2
    codigo_region                                                        geometry
@@ -258,14 +234,14 @@ Attaching package: 'dplyr'</code></pre>
 </div>
 <p>Gráficos a nivel regional.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>grafico_regiones <span class="ot">&lt;-</span> mapa_regiones <span class="sc">|&gt;</span> </span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_set_geometry</span>(mapa_regiones<span class="sc">$</span>geometry) <span class="sc">|&gt;</span> <span class="co"># especificar la geometría del mapa</span></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> <span class="co"># graficar</span></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>() <span class="sc">+</span> <span class="co"># capa geográfica</span></span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">77</span>, <span class="sc">-</span><span class="dv">65</span>)) <span class="co"># recortar coordenadas</span></span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>grafico_regiones <span class="sc">+</span></span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>grafico_regiones <span class="ot">&lt;-</span> mapa_regiones <span class="sc">|&gt;</span> </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_set_geometry</span>(mapa_regiones<span class="sc">$</span>geometry) <span class="sc">|&gt;</span> <span class="co"># especificar la geometría del mapa</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> <span class="co"># graficar</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>() <span class="sc">+</span> <span class="co"># capa geográfica</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">77</span>, <span class="sc">-</span><span class="dv">65</span>)) <span class="co"># recortar coordenadas</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>grafico_regiones <span class="sc">+</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -276,17 +252,17 @@ Attaching package: 'dplyr'</code></pre>
 </div>
 <p>Necesitamos los nombres, por lo que los pegamos. Una opción puede es obtener datos de Wikipedia con funciones de Webscrapping.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rvest)</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co"># dirección de wikipedia con tabla de comunas de Chile</span></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>url <span class="ot">&lt;-</span> <span class="st">"https://es.wikipedia.org/wiki/Anexo:Comunas_de_Chile"</span></span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="co"># obtener tabla con datos de comunas con web scraping</span></span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>tabla <span class="ot">&lt;-</span> <span class="fu">session</span>(url) <span class="sc">|&gt;</span> </span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_html</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_table</span>(<span class="at">convert =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>tabla[[<span class="dv">1</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rvest)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># dirección de wikipedia con tabla de comunas de Chile</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>url <span class="ot">&lt;-</span> <span class="st">"https://es.wikipedia.org/wiki/Anexo:Comunas_de_Chile"</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co"># obtener tabla con datos de comunas con web scraping</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>tabla <span class="ot">&lt;-</span> <span class="fu">session</span>(url) <span class="sc">|&gt;</span> </span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_html</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_table</span>(<span class="at">convert =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>tabla[[<span class="dv">1</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 346 × 12
    CUT (Código Único Territori…¹ Nombre ``    Provincia Región `Superficie(km²)`
@@ -309,7 +285,7 @@ Attaching package: 'dplyr'</code></pre>
 </div>
 <p>Se realiza el respectivo procesamiento.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(janitor)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(janitor)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>
 Attaching package: 'janitor'</code></pre>
@@ -319,25 +295,25 @@ Attaching package: 'janitor'</code></pre>
 
     chisq.test, fisher.test</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stringr)</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="co"># limpiar datos</span></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>datos_comunas <span class="ot">&lt;-</span> tabla[[<span class="dv">1</span>]] <span class="sc">|&gt;</span> </span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">clean_names</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># seleccionar y renombrar columnas</span></span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="at">codigo_comuna =</span> cut_codigo_unico_territorial,</span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>         nombre, region, superficie_km2,</span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>         <span class="at">poblacion =</span> poblacion2020) <span class="sc">|&gt;</span> </span>
-<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># eliminar espacios de la columna de población</span></span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">poblacion =</span> <span class="fu">str_remove_all</span>(poblacion, <span class="st">" "</span>),</span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>         <span class="at">poblacion =</span> <span class="fu">as.numeric</span>(poblacion)) <span class="sc">|&gt;</span> </span>
-<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># eliminar los separadores de miles</span></span>
-<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">superficie_km2 =</span> <span class="fu">str_remove_all</span>(superficie_km2, <span class="st">"</span><span class="sc">\\</span><span class="st">."</span>),</span>
-<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>         <span class="co"># convertir comas a puntos</span></span>
-<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>         <span class="at">superficie_km2 =</span> <span class="fu">str_replace</span>(superficie_km2, <span class="st">","</span>, <span class="st">"."</span>),</span>
-<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>         <span class="at">superficie_km2 =</span> <span class="fu">as.numeric</span>(superficie_km2))</span>
-<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>datos_comunas</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stringr)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co"># limpiar datos</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>datos_comunas <span class="ot">&lt;-</span> tabla[[<span class="dv">1</span>]] <span class="sc">|&gt;</span> </span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">clean_names</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># seleccionar y renombrar columnas</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="at">codigo_comuna =</span> cut_codigo_unico_territorial,</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>         nombre, region, superficie_km2,</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>         <span class="at">poblacion =</span> poblacion2020) <span class="sc">|&gt;</span> </span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># eliminar espacios de la columna de población</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">poblacion =</span> <span class="fu">str_remove_all</span>(poblacion, <span class="st">" "</span>),</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>         <span class="at">poblacion =</span> <span class="fu">as.numeric</span>(poblacion)) <span class="sc">|&gt;</span> </span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># eliminar los separadores de miles</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">superficie_km2 =</span> <span class="fu">str_remove_all</span>(superficie_km2, <span class="st">"</span><span class="sc">\\</span><span class="st">."</span>),</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>         <span class="co"># convertir comas a puntos</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>         <span class="at">superficie_km2 =</span> <span class="fu">str_replace</span>(superficie_km2, <span class="st">","</span>, <span class="st">"."</span>),</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>         <span class="at">superficie_km2 =</span> <span class="fu">as.numeric</span>(superficie_km2))</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>datos_comunas</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 346 × 5
    codigo_comuna nombre        region             superficie_km2 poblacion
@@ -356,13 +332,13 @@ Attaching package: 'janitor'</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>mapa_comunas_2 <span class="ot">&lt;-</span> mapa_comunas <span class="sc">|&gt;</span> </span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># adjuntar datos al mapa, coincidiendo por columna de código de comunas</span></span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(datos_comunas,</span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">by =</span> <span class="fu">join_by</span>(codigo_comuna)) <span class="sc">|&gt;</span> </span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(geometry, <span class="at">.after =</span> <span class="dv">0</span>) <span class="co"># tirar geometría al final</span></span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>mapa_comunas_2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>mapa_comunas_2 <span class="ot">&lt;-</span> mapa_comunas <span class="sc">|&gt;</span> </span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># adjuntar datos al mapa, coincidiendo por columna de código de comunas</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(datos_comunas,</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">by =</span> <span class="fu">join_by</span>(codigo_comuna)) <span class="sc">|&gt;</span> </span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(geometry, <span class="at">.after =</span> <span class="dv">0</span>) <span class="co"># tirar geometría al final</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>mapa_comunas_2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 345 × 8
    codigo_comuna codigo_provincia codigo_region nombre     region superficie_km2
@@ -382,17 +358,17 @@ Attaching package: 'janitor'</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>mapa_comunas_2 <span class="sc">|&gt;</span> </span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_set_geometry</span>(mapa_comunas_2<span class="sc">$</span>geometry) <span class="sc">|&gt;</span> <span class="co"># asignar geometría</span></span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> <span class="co"># gráfico</span></span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">fill =</span> poblacion) <span class="sc">+</span></span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">linewidth =</span> <span class="dv">0</span>) <span class="sc">+</span> <span class="co"># capa geométrica</span></span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_distiller</span>(<span class="at">type =</span> <span class="st">"seq"</span>, <span class="at">palette =</span> <span class="dv">12</span>, </span>
-<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>                       <span class="at">labels =</span> <span class="fu">label_comma</span>(<span class="at">big.mark =</span> <span class="st">"."</span>)) <span class="sc">+</span> <span class="co"># colores</span></span>
-<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">76</span>, <span class="sc">-</span><span class="dv">65</span>, <span class="at">length.out =</span> <span class="dv">3</span>) <span class="sc">|&gt;</span> <span class="fu">floor</span>()) <span class="sc">+</span> <span class="co"># escala x</span></span>
-<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">77</span>, <span class="sc">-</span><span class="dv">65</span>)) <span class="sc">+</span> <span class="co"># recortar coordenadas</span></span>
-<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.key.width =</span> <span class="fu">unit</span>(<span class="dv">3</span>, <span class="st">"mm"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>mapa_comunas_2 <span class="sc">|&gt;</span> </span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_set_geometry</span>(mapa_comunas_2<span class="sc">$</span>geometry) <span class="sc">|&gt;</span> <span class="co"># asignar geometría</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> <span class="co"># gráfico</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">fill =</span> poblacion) <span class="sc">+</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">linewidth =</span> <span class="dv">0</span>) <span class="sc">+</span> <span class="co"># capa geométrica</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_distiller</span>(<span class="at">type =</span> <span class="st">"seq"</span>, <span class="at">palette =</span> <span class="dv">12</span>, </span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>                       <span class="at">labels =</span> <span class="fu">label_comma</span>(<span class="at">big.mark =</span> <span class="st">"."</span>)) <span class="sc">+</span> <span class="co"># colores</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">76</span>, <span class="sc">-</span><span class="dv">65</span>, <span class="at">length.out =</span> <span class="dv">3</span>) <span class="sc">|&gt;</span> <span class="fu">floor</span>()) <span class="sc">+</span> <span class="co"># escala x</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">77</span>, <span class="sc">-</span><span class="dv">65</span>)) <span class="sc">+</span> <span class="co"># recortar coordenadas</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.key.width =</span> <span class="fu">unit</span>(<span class="dv">3</span>, <span class="st">"mm"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -402,17 +378,17 @@ Attaching package: 'janitor'</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>mapa_comunas_2 <span class="sc">|&gt;</span> </span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_set_geometry</span>(mapa_comunas_2<span class="sc">$</span>geometry) <span class="sc">|&gt;</span></span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">fill =</span> superficie_km2) <span class="sc">+</span> <span class="co"># variable de relleno</span></span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">linewidth =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_distiller</span>(<span class="at">type =</span> <span class="st">"seq"</span>, <span class="at">palette =</span> <span class="dv">11</span>,</span>
-<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>                       <span class="at">labels =</span> <span class="fu">label_comma</span>(<span class="at">big.mark =</span> <span class="st">"."</span>)) <span class="sc">+</span> </span>
-<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">76</span>, <span class="sc">-</span><span class="dv">65</span>, <span class="at">length.out =</span> <span class="dv">3</span>) <span class="sc">|&gt;</span> <span class="fu">floor</span>()) <span class="sc">+</span></span>
-<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">77</span>, <span class="sc">-</span><span class="dv">65</span>)) <span class="sc">+</span> </span>
-<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.key.width =</span> <span class="fu">unit</span>(<span class="dv">3</span>, <span class="st">"mm"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>mapa_comunas_2 <span class="sc">|&gt;</span> </span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_set_geometry</span>(mapa_comunas_2<span class="sc">$</span>geometry) <span class="sc">|&gt;</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">fill =</span> superficie_km2) <span class="sc">+</span> <span class="co"># variable de relleno</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">linewidth =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_distiller</span>(<span class="at">type =</span> <span class="st">"seq"</span>, <span class="at">palette =</span> <span class="dv">11</span>,</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>                       <span class="at">labels =</span> <span class="fu">label_comma</span>(<span class="at">big.mark =</span> <span class="st">"."</span>)) <span class="sc">+</span> </span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">76</span>, <span class="sc">-</span><span class="dv">65</span>, <span class="at">length.out =</span> <span class="dv">3</span>) <span class="sc">|&gt;</span> <span class="fu">floor</span>()) <span class="sc">+</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">77</span>, <span class="sc">-</span><span class="dv">65</span>)) <span class="sc">+</span> </span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.key.width =</span> <span class="fu">unit</span>(<span class="dv">3</span>, <span class="st">"mm"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -422,23 +398,23 @@ Attaching package: 'janitor'</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># filtrar datos</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>mapa_comunas_filtro <span class="ot">&lt;-</span> mapa_comunas_2 <span class="sc">|&gt;</span> </span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(codigo_region <span class="sc">==</span> <span class="st">"06"</span>)</span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="co"># mapa</span></span>
-<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>mapa_comunas_filtro <span class="sc">|&gt;</span> </span>
-<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_set_geometry</span>(mapa_comunas_filtro<span class="sc">$</span>geometry) <span class="sc">|&gt;</span></span>
-<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">fill =</span> poblacion) <span class="sc">+</span></span>
-<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">linewidth =</span> <span class="fl">0.12</span>, <span class="at">color =</span> <span class="st">"white"</span>) <span class="sc">+</span></span>
-<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">comma</span>(poblacion, <span class="at">big.mark =</span> <span class="st">"."</span>)), </span>
-<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>               <span class="at">size =</span> <span class="dv">2</span>, <span class="at">color =</span> <span class="st">"white"</span>, <span class="at">check_overlap =</span> T) <span class="sc">+</span></span>
-<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
-<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_distiller</span>(<span class="at">type =</span> <span class="st">"seq"</span>, <span class="at">palette =</span> <span class="dv">12</span>,</span>
-<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>                       <span class="at">labels =</span> <span class="fu">label_comma</span>(<span class="at">big.mark =</span> <span class="st">"."</span>)) <span class="sc">+</span> </span>
-<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.key.width =</span> <span class="fu">unit</span>(<span class="dv">3</span>, <span class="st">"mm"</span>)) <span class="sc">+</span></span>
-<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title =</span> <span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># filtrar datos</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>mapa_comunas_filtro <span class="ot">&lt;-</span> mapa_comunas_2 <span class="sc">|&gt;</span> </span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(codigo_region <span class="sc">==</span> <span class="st">"06"</span>)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="co"># mapa</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>mapa_comunas_filtro <span class="sc">|&gt;</span> </span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_set_geometry</span>(mapa_comunas_filtro<span class="sc">$</span>geometry) <span class="sc">|&gt;</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">fill =</span> poblacion) <span class="sc">+</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">linewidth =</span> <span class="fl">0.12</span>, <span class="at">color =</span> <span class="st">"white"</span>) <span class="sc">+</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">comma</span>(poblacion, <span class="at">big.mark =</span> <span class="st">"."</span>)), </span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>               <span class="at">size =</span> <span class="dv">2</span>, <span class="at">color =</span> <span class="st">"white"</span>, <span class="at">check_overlap =</span> T) <span class="sc">+</span></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_distiller</span>(<span class="at">type =</span> <span class="st">"seq"</span>, <span class="at">palette =</span> <span class="dv">12</span>,</span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>                       <span class="at">labels =</span> <span class="fu">label_comma</span>(<span class="at">big.mark =</span> <span class="st">"."</span>)) <span class="sc">+</span> </span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.key.width =</span> <span class="fu">unit</span>(<span class="dv">3</span>, <span class="st">"mm"</span>)) <span class="sc">+</span></span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title =</span> <span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -448,25 +424,25 @@ Attaching package: 'janitor'</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rvest)</span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="co"># dirección del sitio del banco central</span></span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>url <span class="ot">&lt;-</span> <span class="st">"https://si3.bcentral.cl/Siete/ES/Siete/Cuadro/CAP_CCNN/MN_CCNN76/CCNN2018_PIB_REGIONAL_N/637899740344107786"</span></span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="co"># obtener tabla con datos de comunas con web scraping</span></span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>tabla_pib <span class="ot">&lt;-</span> <span class="fu">session</span>(url) <span class="sc">|&gt;</span> </span>
-<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_html</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_table</span>(<span class="at">convert =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rvest)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="co"># dirección del sitio del banco central</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>url <span class="ot">&lt;-</span> <span class="st">"https://si3.bcentral.cl/Siete/ES/Siete/Cuadro/CAP_CCNN/MN_CCNN76/CCNN2018_PIB_REGIONAL_N/637899740344107786"</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="co"># obtener tabla con datos de comunas con web scraping</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>tabla_pib <span class="ot">&lt;-</span> <span class="fu">session</span>(url) <span class="sc">|&gt;</span> </span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_html</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_table</span>(<span class="at">convert =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>datos_regiones <span class="ot">&lt;-</span> tabla_pib [[<span class="dv">1</span>]] <span class="sc">|&gt;</span> </span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  janitor<span class="sc">::</span><span class="fu">clean_names</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="at">region =</span> serie, <span class="at">pib =</span> x2023) <span class="sc">|&gt;</span> </span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pib =</span> <span class="fu">str_remove_all</span>(pib, <span class="st">"</span><span class="sc">\\</span><span class="st">."</span>),</span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">pib =</span> <span class="fu">as.numeric</span>(pib)) <span class="sc">|&gt;</span> </span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">str_detect</span>(region, <span class="st">"Región"</span>))</span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>datos_regiones</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>datos_regiones <span class="ot">&lt;-</span> tabla_pib [[<span class="dv">1</span>]] <span class="sc">|&gt;</span> </span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  janitor<span class="sc">::</span><span class="fu">clean_names</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="at">region =</span> serie, <span class="at">pib =</span> x2023) <span class="sc">|&gt;</span> </span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pib =</span> <span class="fu">str_remove_all</span>(pib, <span class="st">"</span><span class="sc">\\</span><span class="st">."</span>),</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">pib =</span> <span class="fu">as.numeric</span>(pib)) <span class="sc">|&gt;</span> </span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">str_detect</span>(region, <span class="st">"Región"</span>))</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>datos_regiones</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 16 × 2
    region                                                 pib
@@ -490,35 +466,35 @@ Attaching package: 'janitor'</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>datos_regiones_2 <span class="ot">&lt;-</span> datos_regiones <span class="sc">|&gt;</span> </span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">codigo_region =</span> <span class="fu">case_when</span>(</span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_detect</span>(region, <span class="st">"Arica"</span>) <span class="sc">~</span> <span class="dv">15</span>,</span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_detect</span>(region, <span class="st">"Tarapacá"</span>) <span class="sc">~</span> <span class="dv">1</span>,</span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_detect</span>(region, <span class="st">"Antofagasta"</span>) <span class="sc">~</span> <span class="dv">2</span>,</span>
-<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_detect</span>(region, <span class="st">"Atacama"</span>) <span class="sc">~</span> <span class="dv">3</span>,</span>
-<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_detect</span>(region, <span class="st">"Coquimbo"</span>) <span class="sc">~</span> <span class="dv">4</span>,</span>
-<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_detect</span>(region, <span class="st">"Valparaíso"</span>) <span class="sc">~</span> <span class="dv">5</span>,</span>
-<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_detect</span>(region, <span class="st">"Metropolitana"</span>) <span class="sc">~</span> <span class="dv">13</span>,</span>
-<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_detect</span>(region, <span class="st">"Libertador General"</span>) <span class="sc">~</span> <span class="dv">6</span>,</span>
-<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_detect</span>(region, <span class="st">"Maule"</span>) <span class="sc">~</span> <span class="dv">7</span>,</span>
-<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_detect</span>(region, <span class="st">"Ñuble"</span>) <span class="sc">~</span> <span class="dv">16</span>,</span>
-<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_detect</span>(region, <span class="st">"Biobío"</span>) <span class="sc">~</span> <span class="dv">8</span>,</span>
-<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_detect</span>(region, <span class="st">"Araucanía"</span>) <span class="sc">~</span> <span class="dv">9</span>,</span>
-<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_detect</span>(region, <span class="st">"Los Ríos"</span>) <span class="sc">~</span> <span class="dv">14</span>,</span>
-<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_detect</span>(region, <span class="st">"Los Lagos"</span>) <span class="sc">~</span> <span class="dv">10</span>,</span>
-<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_detect</span>(region, <span class="st">"Aysén"</span>) <span class="sc">~</span> <span class="dv">11</span>,</span>
-<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_detect</span>(region, <span class="st">"Magallanes"</span>) <span class="sc">~</span> <span class="dv">12</span></span>
-<span id="cb32-19"><a href="#cb32-19" aria-hidden="true" tabindex="-1"></a>  )) <span class="sc">|&gt;</span> </span>
-<span id="cb32-20"><a href="#cb32-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">nombre_region =</span> region)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>datos_regiones_2 <span class="ot">&lt;-</span> datos_regiones <span class="sc">|&gt;</span> </span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">codigo_region =</span> <span class="fu">case_when</span>(</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_detect</span>(region, <span class="st">"Arica"</span>) <span class="sc">~</span> <span class="dv">15</span>,</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_detect</span>(region, <span class="st">"Tarapacá"</span>) <span class="sc">~</span> <span class="dv">1</span>,</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_detect</span>(region, <span class="st">"Antofagasta"</span>) <span class="sc">~</span> <span class="dv">2</span>,</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_detect</span>(region, <span class="st">"Atacama"</span>) <span class="sc">~</span> <span class="dv">3</span>,</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_detect</span>(region, <span class="st">"Coquimbo"</span>) <span class="sc">~</span> <span class="dv">4</span>,</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_detect</span>(region, <span class="st">"Valparaíso"</span>) <span class="sc">~</span> <span class="dv">5</span>,</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_detect</span>(region, <span class="st">"Metropolitana"</span>) <span class="sc">~</span> <span class="dv">13</span>,</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_detect</span>(region, <span class="st">"Libertador General"</span>) <span class="sc">~</span> <span class="dv">6</span>,</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_detect</span>(region, <span class="st">"Maule"</span>) <span class="sc">~</span> <span class="dv">7</span>,</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_detect</span>(region, <span class="st">"Ñuble"</span>) <span class="sc">~</span> <span class="dv">16</span>,</span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_detect</span>(region, <span class="st">"Biobío"</span>) <span class="sc">~</span> <span class="dv">8</span>,</span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_detect</span>(region, <span class="st">"Araucanía"</span>) <span class="sc">~</span> <span class="dv">9</span>,</span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_detect</span>(region, <span class="st">"Los Ríos"</span>) <span class="sc">~</span> <span class="dv">14</span>,</span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_detect</span>(region, <span class="st">"Los Lagos"</span>) <span class="sc">~</span> <span class="dv">10</span>,</span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_detect</span>(region, <span class="st">"Aysén"</span>) <span class="sc">~</span> <span class="dv">11</span>,</span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_detect</span>(region, <span class="st">"Magallanes"</span>) <span class="sc">~</span> <span class="dv">12</span></span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>  )) <span class="sc">|&gt;</span> </span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">nombre_region =</span> region)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>mapa_regiones_2 <span class="ot">&lt;-</span> mapa_regiones <span class="sc">|&gt;</span> </span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">codigo_region =</span> <span class="fu">as.numeric</span>(codigo_region)) <span class="sc">|&gt;</span> </span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(datos_regiones_2,</span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">by =</span> <span class="fu">join_by</span>(codigo_region)) <span class="sc">|&gt;</span> </span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(geometry, <span class="at">.after =</span> <span class="dv">0</span>) <span class="co"># tirar columna al final</span></span>
-<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>mapa_regiones_2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>mapa_regiones_2 <span class="ot">&lt;-</span> mapa_regiones <span class="sc">|&gt;</span> </span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">codigo_region =</span> <span class="fu">as.numeric</span>(codigo_region)) <span class="sc">|&gt;</span> </span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(datos_regiones_2,</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">by =</span> <span class="fu">join_by</span>(codigo_region)) <span class="sc">|&gt;</span> </span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(geometry, <span class="at">.after =</span> <span class="dv">0</span>) <span class="co"># tirar columna al final</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>mapa_regiones_2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 16 × 4
    codigo_region nombre_region                     pib                  geometry
@@ -542,17 +518,17 @@ Attaching package: 'janitor'</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>mapa_regiones_2 <span class="sc">|&gt;</span> </span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_set_geometry</span>(mapa_regiones_2<span class="sc">$</span>geometry) <span class="sc">|&gt;</span> <span class="co"># asignar geometría</span></span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> <span class="co"># gráfico</span></span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">fill =</span> pib) <span class="sc">+</span></span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">linewidth =</span> <span class="fl">0.12</span>, <span class="at">color =</span> <span class="st">"white"</span>) <span class="sc">+</span> <span class="co"># capa geométrica</span></span>
-<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
-<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_distiller</span>(<span class="at">type =</span> <span class="st">"seq"</span>, <span class="at">palette =</span> <span class="dv">18</span>,</span>
-<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>                       <span class="at">labels =</span> <span class="fu">label_comma</span>(<span class="at">big.mark =</span> <span class="st">"."</span>)) <span class="sc">+</span></span>
-<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">76</span>, <span class="sc">-</span><span class="dv">65</span>, <span class="at">length.out =</span> <span class="dv">3</span>) <span class="sc">|&gt;</span> <span class="fu">floor</span>()) <span class="sc">+</span></span>
-<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">expand =</span> F, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">77</span>, <span class="sc">-</span><span class="dv">65</span>)) <span class="sc">+</span> <span class="co"># recortar coordenadas</span></span>
-<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.key.width =</span> <span class="fu">unit</span>(<span class="dv">3</span>, <span class="st">"mm"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>mapa_regiones_2 <span class="sc">|&gt;</span> </span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_set_geometry</span>(mapa_regiones_2<span class="sc">$</span>geometry) <span class="sc">|&gt;</span> <span class="co"># asignar geometría</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> <span class="co"># gráfico</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">fill =</span> pib) <span class="sc">+</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">linewidth =</span> <span class="fl">0.12</span>, <span class="at">color =</span> <span class="st">"white"</span>) <span class="sc">+</span> <span class="co"># capa geométrica</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_distiller</span>(<span class="at">type =</span> <span class="st">"seq"</span>, <span class="at">palette =</span> <span class="dv">18</span>,</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>                       <span class="at">labels =</span> <span class="fu">label_comma</span>(<span class="at">big.mark =</span> <span class="st">"."</span>)) <span class="sc">+</span></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">76</span>, <span class="sc">-</span><span class="dv">65</span>, <span class="at">length.out =</span> <span class="dv">3</span>) <span class="sc">|&gt;</span> <span class="fu">floor</span>()) <span class="sc">+</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">expand =</span> F, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">77</span>, <span class="sc">-</span><span class="dv">65</span>)) <span class="sc">+</span> <span class="co"># recortar coordenadas</span></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.key.width =</span> <span class="fu">unit</span>(<span class="dv">3</span>, <span class="st">"mm"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -565,84 +541,277 @@ Attaching package: 'janitor'</code></pre>
 </section>
 <section id="censo-2017" class="level1" data-number="2">
 <h1 data-number="2"><span class="header-section-number">2</span> Censo 2017</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages('censo2017')</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(censo2017)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>CENSO 2017
+La documentacion del paquete y ejemplos de uso se encuentran en https://pacha.dev/censo2017/.
+Visita https://buymeacoffee.com/pacha si deseas donar para contribuir al desarrollo de este software.
+Esta libreria necesita 3.5 GB libres para la crear la base de datos localmente. Una vez creada la base, esta ocupa 1.0 GB en disco.</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># cargar bbdd</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="fu">censo_descargar</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># con la bbdd instalada</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>variables <span class="ot">&lt;-</span> <span class="fu">censo_tabla</span>(<span class="st">"variables"</span>)</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>variables_codificacion <span class="ot">&lt;-</span> <span class="fu">censo_tabla</span>(<span class="st">"variables_codificacion"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>variables</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 60 × 5
+   tabla    variable      descripcion                         tipo    rango     
+   &lt;chr&gt;    &lt;chr&gt;         &lt;chr&gt;                               &lt;chr&gt;   &lt;chr&gt;     
+ 1 personas personan      Número de la Persona                integer 0 - 9999  
+ 2 personas p07           Relación de Parentesco              integer 1 - 19    
+ 3 personas p08           Sexo                                integer 1 - 2     
+ 4 personas p09           Edad                                integer 0 - 130   
+ 5 personas p10           Residencia Habitual                 integer 1 - 4     
+ 6 personas p10comuna     Comuna de Residencia Habitual       integer 997 - 152…
+ 7 personas p10pais       Pais de Residencia Habitual         integer 0 - 997   
+ 8 personas p10pais_grupo Pais de Residencia Habitual (Grupo) integer 0 - 997   
+ 9 personas p11           Comuna de Residencia Anterior       integer 0 - 9     
+10 personas p11comuna     Comuna de Residencia Anterior       integer 997 - 152…
+# ℹ 50 more rows</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>variables <span class="sc">%&gt;%</span> <span class="fu">filter</span>(variable <span class="sc">==</span> <span class="st">"p16"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 5
+  tabla    variable descripcion                                      tipo  rango
+  &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt;                                            &lt;chr&gt; &lt;chr&gt;
+1 personas p16      Se Considera Perteneciente A Pueblo Indígena u … inte… 1 - 2</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>variables <span class="sc">%&gt;%</span> <span class="fu">filter</span>(variable <span class="sc">==</span> <span class="st">"p16a"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 5
+  tabla    variable descripcion                  tipo    rango 
+  &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt;                        &lt;chr&gt;   &lt;chr&gt; 
+1 personas p16a     Pueblo Indígena u Originario integer 1 - 10</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>indigena_total <span class="ot">&lt;-</span> <span class="fu">tbl</span>(<span class="fu">censo_conectar</span>(), <span class="st">"zonas"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">region =</span> <span class="fu">substr</span>(<span class="fu">as.character</span>(geocodigo), <span class="dv">1</span>, <span class="dv">2</span>),</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">comuna =</span> <span class="fu">substr</span>(<span class="fu">as.character</span>(geocodigo), <span class="dv">1</span>, <span class="dv">5</span>)</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>  <span class="co">#filter(region == "08") %&gt;% </span></span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(comuna, geocodigo, zonaloc_ref_id, region) <span class="sc">%&gt;%</span></span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(<span class="fu">select</span>(<span class="fu">tbl</span>(<span class="fu">censo_conectar</span>(), <span class="st">"viviendas"</span>), zonaloc_ref_id, vivienda_ref_id), <span class="at">by =</span> <span class="st">"zonaloc_ref_id"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(<span class="fu">select</span>(<span class="fu">tbl</span>(<span class="fu">censo_conectar</span>(), <span class="st">"hogares"</span>), vivienda_ref_id, hogar_ref_id), <span class="at">by =</span> <span class="st">"vivienda_ref_id"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(<span class="fu">select</span>(<span class="fu">tbl</span>(<span class="fu">censo_conectar</span>(), <span class="st">"personas"</span>), hogar_ref_id, <span class="at">indigena =</span> p16), <span class="at">by =</span> <span class="st">"hogar_ref_id"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>indigena_total <span class="ot">&lt;-</span> indigena_total <span class="sc">%&gt;%</span> </span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(comuna, indigena) <span class="sc">%&gt;%</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">cuenta =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(comuna) <span class="sc">%&gt;%</span></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">proporcion =</span> cuenta <span class="sc">/</span> <span class="fu">sum</span>(cuenta))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has grouped output by 'comuna'. You can override using the
+`.groups` argument.</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>mapa <span class="ot">&lt;-</span> mapa_comunas <span class="sc">%&gt;%</span> </span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(codigo_comuna <span class="sc">!=</span> <span class="st">"05201"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(codigo_comuna <span class="sc">!=</span> <span class="st">"05103"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(codigo_comuna <span class="sc">!=</span> <span class="st">"05104"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(indigena_total, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"codigo_comuna"</span> <span class="ot">=</span> <span class="st">"comuna"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>colors <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"#DCA761"</span>,<span class="st">"#C6C16D"</span>,<span class="st">"#8B9C94"</span>,<span class="st">"#628CA5"</span>,<span class="st">"#b8c5cf"</span>)</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>g <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> mapa <span class="sc">%&gt;%</span> </span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>            <span class="fu">select</span>(codigo_comuna, geometry) <span class="sc">%&gt;%</span> </span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>            <span class="fu">left_join</span>(</span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>              mapa <span class="sc">%&gt;%</span> </span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>                <span class="fu">filter</span>(indigena <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a>                <span class="fu">select</span>(codigo_comuna, indigena, proporcion),</span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a>              <span class="at">by =</span> <span class="st">"codigo_comuna"</span></span>
+<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a>            ),</span>
+<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a>          <span class="fu">aes</span>(<span class="at">fill =</span> proporcion, <span class="at">geometry =</span> geometry),</span>
+<span id="cb42-13"><a href="#cb42-13" aria-hidden="true" tabindex="-1"></a>          <span class="at">size =</span> <span class="fl">0.1</span>) <span class="sc">+</span></span>
+<span id="cb42-14"><a href="#cb42-14" aria-hidden="true" tabindex="-1"></a>  <span class="co">#geom_sf_label(aes(label = comuna, geometry = geometry)) +</span></span>
+<span id="cb42-15"><a href="#cb42-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_gradientn</span>(<span class="at">colours =</span> <span class="fu">rev</span>(colors), <span class="at">name =</span> <span class="st">"Porcentaje"</span>) <span class="sc">+</span></span>
+<span id="cb42-16"><a href="#cb42-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"% de Habitantes Indígenas"</span>,</span>
+<span id="cb42-17"><a href="#cb42-17" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Chile continental"</span>) <span class="sc">+</span></span>
+<span id="cb42-18"><a href="#cb42-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">16</span>)</span>
+<span id="cb42-19"><a href="#cb42-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-20"><a href="#cb42-20" aria-hidden="true" tabindex="-1"></a>g</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="clase5_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co">#ggsave("img/poblacionindigena_(0)total.png", width = 32, height = 25, units = "cm")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="caso-práctico-región-de-atacama." class="level4" data-number="2.0.0.1">
+<h4 data-number="2.0.0.1" class="anchored" data-anchor-id="caso-práctico-región-de-atacama."><span class="header-section-number">2.0.0.1</span> Caso práctico: Región de Atacama.</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>indigena_reg3 <span class="ot">&lt;-</span> <span class="fu">tbl</span>(<span class="fu">censo_conectar</span>(), <span class="st">"zonas"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">region =</span> <span class="fu">substr</span>(<span class="fu">as.character</span>(geocodigo), <span class="dv">1</span>, <span class="dv">2</span>),</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">comuna =</span> <span class="fu">substr</span>(<span class="fu">as.character</span>(geocodigo), <span class="dv">1</span>, <span class="dv">5</span>)</span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(region <span class="sc">==</span> <span class="st">"03"</span>) <span class="sc">%&gt;%</span> <span class="co">#Añadimos un Filtro</span></span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(comuna, geocodigo, zonaloc_ref_id, region) <span class="sc">%&gt;%</span></span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(<span class="fu">select</span>(<span class="fu">tbl</span>(<span class="fu">censo_conectar</span>(), <span class="st">"viviendas"</span>), zonaloc_ref_id, vivienda_ref_id), <span class="at">by =</span> <span class="st">"zonaloc_ref_id"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(<span class="fu">select</span>(<span class="fu">tbl</span>(<span class="fu">censo_conectar</span>(), <span class="st">"hogares"</span>), vivienda_ref_id, hogar_ref_id), <span class="at">by =</span> <span class="st">"vivienda_ref_id"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(<span class="fu">select</span>(<span class="fu">tbl</span>(<span class="fu">censo_conectar</span>(), <span class="st">"personas"</span>), hogar_ref_id, <span class="at">indigena =</span> p16), <span class="at">by =</span> <span class="st">"hogar_ref_id"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>indigena_reg3 <span class="ot">&lt;-</span> indigena_reg3 <span class="sc">%&gt;%</span> </span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(comuna, indigena) <span class="sc">%&gt;%</span></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">cuenta =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(comuna) <span class="sc">%&gt;%</span></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">proporcion =</span> cuenta <span class="sc">/</span> <span class="fu">sum</span>(cuenta)); indigena_reg3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has grouped output by 'comuna'. You can override using the
+`.groups` argument.</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 27 × 4
+# Groups:   comuna [9]
+   comuna indigena cuenta proporcion
+   &lt;chr&gt;     &lt;int&gt;  &lt;int&gt;      &lt;dbl&gt;
+ 1 03101         1  27078    0.176  
+ 2 03101         2 125052    0.812  
+ 3 03101        99   1807    0.0117 
+ 4 03102         1   3129    0.177  
+ 5 03102         2  13742    0.778  
+ 6 03102        99    791    0.0448 
+ 7 03103         1   4375    0.312  
+ 8 03103         2   9526    0.680  
+ 9 03103        99    118    0.00842
+10 03201         1   1299    0.106  
+# ℹ 17 more rows</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>mapa_atacama <span class="ot">&lt;-</span> mapa_comunas <span class="sc">%&gt;%</span> </span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(codigo_region <span class="sc">==</span> <span class="st">"03"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(indigena_reg3, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"codigo_comuna"</span> <span class="ot">=</span> <span class="st">"comuna"</span>))</span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>colors <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"#DCA761"</span>,<span class="st">"#C6C16D"</span>,<span class="st">"#8B9C94"</span>,<span class="st">"#628CA5"</span>,<span class="st">"#b8c5cf"</span>)</span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>g <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> mapa_atacama <span class="sc">%&gt;%</span> </span>
+<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a>            <span class="fu">select</span>(codigo_comuna, geometry) <span class="sc">%&gt;%</span> </span>
+<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a>            <span class="fu">left_join</span>(</span>
+<span id="cb48-12"><a href="#cb48-12" aria-hidden="true" tabindex="-1"></a>              mapa_atacama <span class="sc">%&gt;%</span> </span>
+<span id="cb48-13"><a href="#cb48-13" aria-hidden="true" tabindex="-1"></a>                <span class="fu">filter</span>(indigena <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb48-14"><a href="#cb48-14" aria-hidden="true" tabindex="-1"></a>                <span class="fu">select</span>(codigo_comuna, indigena, proporcion),</span>
+<span id="cb48-15"><a href="#cb48-15" aria-hidden="true" tabindex="-1"></a>              <span class="at">by =</span> <span class="st">"codigo_comuna"</span></span>
+<span id="cb48-16"><a href="#cb48-16" aria-hidden="true" tabindex="-1"></a>            ),</span>
+<span id="cb48-17"><a href="#cb48-17" aria-hidden="true" tabindex="-1"></a>          <span class="fu">aes</span>(<span class="at">fill =</span> proporcion, <span class="at">geometry =</span> geometry),</span>
+<span id="cb48-18"><a href="#cb48-18" aria-hidden="true" tabindex="-1"></a>          <span class="at">size =</span> <span class="fl">0.1</span>) <span class="sc">+</span></span>
+<span id="cb48-19"><a href="#cb48-19" aria-hidden="true" tabindex="-1"></a>  <span class="co">#geom_sf_label(aes(label = comuna, geometry = geometry)) +</span></span>
+<span id="cb48-20"><a href="#cb48-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_gradientn</span>(<span class="at">colours =</span> <span class="fu">rev</span>(colors), <span class="at">name =</span> <span class="st">"Porcentaje"</span>) <span class="sc">+</span></span>
+<span id="cb48-21"><a href="#cb48-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"(%) Habitantes autoidentificados como indígenas"</span>,</span>
+<span id="cb48-22"><a href="#cb48-22" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Región de Atacama"</span>) <span class="sc">+</span></span>
+<span id="cb48-23"><a href="#cb48-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">11</span>)</span>
+<span id="cb48-24"><a href="#cb48-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-25"><a href="#cb48-25" aria-hidden="true" tabindex="-1"></a>g</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="clase5_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
 </section>
 <section id="encuesta-longitudinal-de-relaciones-interculturales-elri" class="level1" data-number="3">
 <h1 data-number="3"><span class="header-section-number">3</span> Encuesta Longitudinal de Relaciones Interculturales (ELRI)</h1>
-<p>Carga de datos</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggrepel)</span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>elri <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"/Users/matdknu/Dropbox/CIIR/Encuesta-ELRI/BBDD/BBDD_ELRI_LONG_4.0.dta"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggrepel)</span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>elri <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"/Users/matdknu/Dropbox/CIIR/Encuesta-ELRI/BBDD/BBDD_ELRI_LONG_4.0.dta"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Procesamiento de datos</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>elri_mapa <span class="ot">&lt;-</span> elri <span class="sc">|&gt;</span> </span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(comuna) <span class="sc">|&gt;</span> </span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">codigo_comuna =</span> comuna) <span class="sc">|&gt;</span> </span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(codigo_comuna)</span>
-<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>mapa <span class="ot">&lt;-</span> chilemapas<span class="sc">::</span>mapa_comunas <span class="sc">|&gt;</span> </span>
-<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(</span>
-<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>    chilemapas<span class="sc">::</span>codigos_territoriales <span class="sc">|&gt;</span> </span>
-<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>      <span class="fu">select</span>(<span class="fu">matches</span>(<span class="st">"comuna"</span>)), </span>
-<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">by =</span> <span class="st">"codigo_comuna"</span>)</span>
-<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Asegúrate de que la variable sea de tipo carácter para preservar los ceros a la izquierda</span></span>
-<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>elri_mapa<span class="sc">$</span>codigo_comuna <span class="ot">&lt;-</span> <span class="fu">as.character</span>(elri_mapa<span class="sc">$</span>codigo_comuna)</span>
-<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Añadir un 0 al principio cuando el código tenga 4 dígitos</span></span>
-<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a>elri_mapa<span class="sc">$</span>codigo_comuna <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">nchar</span>(elri_mapa<span class="sc">$</span>codigo_comuna) <span class="sc">==</span> <span class="dv">4</span>, </span>
-<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a>                                  <span class="fu">paste0</span>(<span class="st">"0"</span>, elri_mapa<span class="sc">$</span>codigo_comuna), </span>
-<span id="cb37-18"><a href="#cb37-18" aria-hidden="true" tabindex="-1"></a>                                  elri_mapa<span class="sc">$</span>codigo_comuna)</span>
-<span id="cb37-19"><a href="#cb37-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-20"><a href="#cb37-20" aria-hidden="true" tabindex="-1"></a>mapa_datos_2 <span class="ot">&lt;-</span> mapa <span class="sc">|&gt;</span> </span>
-<span id="cb37-21"><a href="#cb37-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(elri_mapa, <span class="at">by =</span> <span class="st">"codigo_comuna"</span>) </span>
-<span id="cb37-22"><a href="#cb37-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-23"><a href="#cb37-23" aria-hidden="true" tabindex="-1"></a>mapa_datos_2<span class="sc">$</span>n[<span class="fu">is.na</span>(mapa_datos_2<span class="sc">$</span>n)] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
-<span id="cb37-24"><a href="#cb37-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-25"><a href="#cb37-25" aria-hidden="true" tabindex="-1"></a>mapa_datos_2 <span class="ot">&lt;-</span> mapa_datos_2 <span class="sc">|&gt;</span> </span>
-<span id="cb37-26"><a href="#cb37-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dummy =</span> <span class="fu">if_else</span>(n <span class="sc">==</span> <span class="dv">0</span>, <span class="st">"Comuna NO encuestada"</span>, <span class="st">"Comuna encuestada"</span>))</span>
-<span id="cb37-27"><a href="#cb37-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-28"><a href="#cb37-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Calcular las coordenadas y filtrar fuera de geom_text_repel</span></span>
-<span id="cb37-29"><a href="#cb37-29" aria-hidden="true" tabindex="-1"></a>mapa_datos_2 <span class="ot">&lt;-</span> mapa_datos_2 <span class="sc">|&gt;</span> </span>
-<span id="cb37-30"><a href="#cb37-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(nombre_comuna <span class="sc">!=</span> <span class="st">"Isla de Pascua"</span>, nombre_comuna <span class="sc">!=</span> <span class="st">"Juan Fernandez"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb37-31"><a href="#cb37-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">centroid =</span> <span class="fu">st_centroid</span>(geometry)) <span class="sc">|&gt;</span> </span>
-<span id="cb37-32"><a href="#cb37-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">x =</span> <span class="fu">st_coordinates</span>(centroid)[,<span class="dv">1</span>], <span class="at">y =</span> <span class="fu">st_coordinates</span>(centroid)[,<span class="dv">2</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>elri_mapa <span class="ot">&lt;-</span> elri <span class="sc">|&gt;</span> </span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(comuna) <span class="sc">|&gt;</span> </span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">codigo_comuna =</span> comuna) <span class="sc">|&gt;</span> </span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(codigo_comuna)</span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>mapa <span class="ot">&lt;-</span> chilemapas<span class="sc">::</span>mapa_comunas <span class="sc">|&gt;</span> </span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(</span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a>    chilemapas<span class="sc">::</span>codigos_territoriales <span class="sc">|&gt;</span> </span>
+<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a>      <span class="fu">select</span>(<span class="fu">matches</span>(<span class="st">"comuna"</span>)), </span>
+<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">by =</span> <span class="st">"codigo_comuna"</span>)</span>
+<span id="cb50-11"><a href="#cb50-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-12"><a href="#cb50-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Asegúrate de que la variable sea de tipo carácter para preservar los ceros a la izquierda</span></span>
+<span id="cb50-13"><a href="#cb50-13" aria-hidden="true" tabindex="-1"></a>elri_mapa<span class="sc">$</span>codigo_comuna <span class="ot">&lt;-</span> <span class="fu">as.character</span>(elri_mapa<span class="sc">$</span>codigo_comuna)</span>
+<span id="cb50-14"><a href="#cb50-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-15"><a href="#cb50-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Añadir un 0 al principio cuando el código tenga 4 dígitos</span></span>
+<span id="cb50-16"><a href="#cb50-16" aria-hidden="true" tabindex="-1"></a>elri_mapa<span class="sc">$</span>codigo_comuna <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">nchar</span>(elri_mapa<span class="sc">$</span>codigo_comuna) <span class="sc">==</span> <span class="dv">4</span>, </span>
+<span id="cb50-17"><a href="#cb50-17" aria-hidden="true" tabindex="-1"></a>                                  <span class="fu">paste0</span>(<span class="st">"0"</span>, elri_mapa<span class="sc">$</span>codigo_comuna), </span>
+<span id="cb50-18"><a href="#cb50-18" aria-hidden="true" tabindex="-1"></a>                                  elri_mapa<span class="sc">$</span>codigo_comuna)</span>
+<span id="cb50-19"><a href="#cb50-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-20"><a href="#cb50-20" aria-hidden="true" tabindex="-1"></a>mapa_datos_2 <span class="ot">&lt;-</span> mapa <span class="sc">|&gt;</span> </span>
+<span id="cb50-21"><a href="#cb50-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(elri_mapa, <span class="at">by =</span> <span class="st">"codigo_comuna"</span>) </span>
+<span id="cb50-22"><a href="#cb50-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-23"><a href="#cb50-23" aria-hidden="true" tabindex="-1"></a>mapa_datos_2<span class="sc">$</span>n[<span class="fu">is.na</span>(mapa_datos_2<span class="sc">$</span>n)] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb50-24"><a href="#cb50-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-25"><a href="#cb50-25" aria-hidden="true" tabindex="-1"></a>mapa_datos_2 <span class="ot">&lt;-</span> mapa_datos_2 <span class="sc">|&gt;</span> </span>
+<span id="cb50-26"><a href="#cb50-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dummy =</span> <span class="fu">if_else</span>(n <span class="sc">==</span> <span class="dv">0</span>, <span class="st">"Comuna NO encuestada"</span>, <span class="st">"Comuna encuestada"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filtrar las comunas que necesitas</span></span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>datos_arica <span class="ot">&lt;-</span> mapa_datos_2 <span class="sc">|&gt;</span> <span class="fu">filter</span>(nombre_comuna <span class="sc">==</span> <span class="st">"Arica"</span><span class="sc">|</span> nombre_comuna <span class="sc">==</span> <span class="st">"Santiago"</span><span class="sc">|</span> </span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>                                      nombre_comuna <span class="sc">==</span> <span class="st">"Temuco"</span> <span class="sc">|</span> nombre_comuna <span class="sc">==</span> <span class="st">"Punta Arenas"</span><span class="sc">|</span></span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>                                      nombre_comuna <span class="sc">==</span> <span class="st">"Antofagasta"</span> <span class="sc">|</span></span>
-<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>                                      nombre_comuna <span class="sc">==</span> <span class="st">"Tierra Amarilla"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calcular las coordenadas y filtrar fuera de geom_text_repel</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>mapa_datos_2 <span class="ot">&lt;-</span> mapa_datos_2 <span class="sc">|&gt;</span> </span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(nombre_comuna <span class="sc">!=</span> <span class="st">"Isla de Pascua"</span>, nombre_comuna <span class="sc">!=</span> <span class="st">"Juan Fernandez"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">centroid =</span> <span class="fu">st_centroid</span>(geometry)) <span class="sc">|&gt;</span> </span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">x =</span> <span class="fu">st_coordinates</span>(centroid)[,<span class="dv">1</span>], <span class="at">y =</span> <span class="fu">st_coordinates</span>(centroid)[,<span class="dv">2</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Visualización del mapa</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>g1 <span class="ot">&lt;-</span> mapa_datos_2 <span class="sc">|&gt;</span> </span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">geometry =</span> geometry, <span class="at">fill =</span> dummy)) <span class="sc">+</span></span>
-<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text_repel</span>(<span class="at">data =</span> datos_arica, </span>
-<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">label =</span> nombre_comuna),</span>
-<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>                  <span class="at">size =</span> <span class="dv">3</span>,</span>
-<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>                  <span class="at">nudge_x =</span> <span class="sc">-</span><span class="dv">10</span>,  <span class="co"># Aumenta la distancia hacia la izquierda</span></span>
-<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>                  <span class="at">hjust =</span> <span class="dv">1</span>,      <span class="co"># Alinea las etiquetas a la izquierda</span></span>
-<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a>                  <span class="at">direction =</span> <span class="st">"y"</span>,  <span class="co"># Mantiene las etiquetas en la misma línea vertical</span></span>
-<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a>                  <span class="at">max.overlaps =</span> <span class="cn">Inf</span>,  <span class="co"># Permite que todas las etiquetas se muestren</span></span>
-<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a>                  <span class="at">force =</span> <span class="dv">5</span>,       <span class="co"># Aumenta la fuerza de repulsión para evitar el traslape</span></span>
-<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a>                  <span class="at">box.padding =</span> <span class="fl">0.5</span>,  <span class="co"># Espaciado adicional entre las etiquetas</span></span>
-<span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a>                  <span class="at">segment.color =</span> <span class="st">"black"</span>,  <span class="co"># Color de las líneas</span></span>
-<span id="cb39-14"><a href="#cb39-14" aria-hidden="true" tabindex="-1"></a>                  <span class="at">segment.size =</span> <span class="fl">0.5</span>,  <span class="co"># Tamaño de las líneas</span></span>
-<span id="cb39-15"><a href="#cb39-15" aria-hidden="true" tabindex="-1"></a>                  <span class="at">segment.curvature =</span> <span class="dv">0</span>,  <span class="co"># Mantiene las líneas rectas</span></span>
-<span id="cb39-16"><a href="#cb39-16" aria-hidden="true" tabindex="-1"></a>                  <span class="at">segment.ncp =</span> <span class="dv">1</span>,  <span class="co"># Número de puntos de control para la curva</span></span>
-<span id="cb39-17"><a href="#cb39-17" aria-hidden="true" tabindex="-1"></a>                  <span class="at">segment.angle =</span> <span class="dv">180</span>  <span class="co"># Ángulo para las líneas rectas hacia la izquierda</span></span>
-<span id="cb39-18"><a href="#cb39-18" aria-hidden="true" tabindex="-1"></a>  )  <span class="sc">+</span> </span>
-<span id="cb39-19"><a href="#cb39-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Comuna encuestada"</span> <span class="ot">=</span> <span class="st">"grey"</span>, <span class="st">"Comuna NO encuestada"</span> <span class="ot">=</span> <span class="st">"white"</span>))  <span class="sc">+</span> </span>
-<span id="cb39-20"><a href="#cb39-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span></span>
-<span id="cb39-21"><a href="#cb39-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)  <span class="co"># Para eliminar la leyenda, si no la quieres</span></span>
-<span id="cb39-22"><a href="#cb39-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb39-23"><a href="#cb39-23" aria-hidden="true" tabindex="-1"></a>g1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filtrar las comunas que necesitas</span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>datos_arica <span class="ot">&lt;-</span> mapa_datos_2 <span class="sc">|&gt;</span> <span class="fu">filter</span>(nombre_comuna <span class="sc">==</span> <span class="st">"Arica"</span><span class="sc">|</span> nombre_comuna <span class="sc">==</span> <span class="st">"Santiago"</span><span class="sc">|</span> </span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>                                      nombre_comuna <span class="sc">==</span> <span class="st">"Temuco"</span> <span class="sc">|</span> nombre_comuna <span class="sc">==</span> <span class="st">"Punta Arenas"</span><span class="sc">|</span></span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>                                      nombre_comuna <span class="sc">==</span> <span class="st">"Antofagasta"</span> <span class="sc">|</span></span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>                                      nombre_comuna <span class="sc">==</span> <span class="st">"Tierra Amarilla"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Visualización del mapa con sus respectivas etiquetas.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>g1 <span class="ot">&lt;-</span> mapa_datos_2 <span class="sc">|&gt;</span> </span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">geometry =</span> geometry, <span class="at">fill =</span> dummy)) <span class="sc">+</span></span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text_repel</span>(<span class="at">data =</span> datos_arica, </span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">label =</span> nombre_comuna),</span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a>                  <span class="at">size =</span> <span class="dv">3</span>,</span>
+<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a>                  <span class="at">nudge_x =</span> <span class="sc">-</span><span class="dv">10</span>,  <span class="co"># Aumenta la distancia hacia la izquierda</span></span>
+<span id="cb53-8"><a href="#cb53-8" aria-hidden="true" tabindex="-1"></a>                  <span class="at">hjust =</span> <span class="dv">1</span>,      <span class="co"># Alinea las etiquetas a la izquierda</span></span>
+<span id="cb53-9"><a href="#cb53-9" aria-hidden="true" tabindex="-1"></a>                  <span class="at">direction =</span> <span class="st">"y"</span>,  <span class="co"># Mantiene las etiquetas en la misma línea vertical</span></span>
+<span id="cb53-10"><a href="#cb53-10" aria-hidden="true" tabindex="-1"></a>                  <span class="at">max.overlaps =</span> <span class="cn">Inf</span>,  <span class="co"># Permite que todas las etiquetas se muestren</span></span>
+<span id="cb53-11"><a href="#cb53-11" aria-hidden="true" tabindex="-1"></a>                  <span class="at">force =</span> <span class="dv">5</span>,       <span class="co"># Aumenta la fuerza de repulsión para evitar el traslape</span></span>
+<span id="cb53-12"><a href="#cb53-12" aria-hidden="true" tabindex="-1"></a>                  <span class="at">box.padding =</span> <span class="fl">0.5</span>,  <span class="co"># Espaciado adicional entre las etiquetas</span></span>
+<span id="cb53-13"><a href="#cb53-13" aria-hidden="true" tabindex="-1"></a>                  <span class="at">segment.color =</span> <span class="st">"black"</span>,  <span class="co"># Color de las líneas</span></span>
+<span id="cb53-14"><a href="#cb53-14" aria-hidden="true" tabindex="-1"></a>                  <span class="at">segment.size =</span> <span class="fl">0.5</span>,  <span class="co"># Tamaño de las líneas</span></span>
+<span id="cb53-15"><a href="#cb53-15" aria-hidden="true" tabindex="-1"></a>                  <span class="at">segment.curvature =</span> <span class="dv">0</span>,  <span class="co"># Mantiene las líneas rectas</span></span>
+<span id="cb53-16"><a href="#cb53-16" aria-hidden="true" tabindex="-1"></a>                  <span class="at">segment.ncp =</span> <span class="dv">1</span>,  <span class="co"># Número de puntos de control para la curva</span></span>
+<span id="cb53-17"><a href="#cb53-17" aria-hidden="true" tabindex="-1"></a>                  <span class="at">segment.angle =</span> <span class="dv">180</span>  <span class="co"># Ángulo para las líneas rectas hacia la izquierda</span></span>
+<span id="cb53-18"><a href="#cb53-18" aria-hidden="true" tabindex="-1"></a>  )  <span class="sc">+</span> </span>
+<span id="cb53-19"><a href="#cb53-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Comuna encuestada"</span> <span class="ot">=</span> <span class="st">"grey"</span>, <span class="st">"Comuna NO encuestada"</span> <span class="ot">=</span> <span class="st">"white"</span>))  <span class="sc">+</span> </span>
+<span id="cb53-20"><a href="#cb53-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span></span>
+<span id="cb53-21"><a href="#cb53-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)  <span class="co"># Para eliminar la leyenda, si no la quieres</span></span>
+<span id="cb53-22"><a href="#cb53-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-23"><a href="#cb53-23" aria-hidden="true" tabindex="-1"></a>g1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
