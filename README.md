@@ -26,3 +26,5 @@ Inscripciones aquí: *Pronto*
 | 6     | Análisis de texto con R I                                         | [Práctico 6](https://matdknu.github.io/cursoR-etnicidad/clases/clase6/clase6.html) |            | `Quanteda`                         | [Text Mining with R](https://www.tidytextmining.com/)                      |
 | 7     | Procesamiento de datos con Pandas (Python)                        | [Práctico 7](https://matdknu.github.io/cursoR-etnicidad/clases/clase7/clase7.html) |            | `Pandas`                           | [Guía de Uso PANDAS](https://pandas.pydata.org/docs/user_guide/index.html) |
 | 8     | Uso de IA generativa en Python                                    | [Práctico 8](https://matdknu.github.io/cursoR-etnicidad/clases/clase8/clase8.html) |            |                                    | [Documentación OpenAI](https://platform.openai.com/docs/)                  |
+
+![](img/curso-R-programming.png)
