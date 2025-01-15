@@ -6,7 +6,7 @@ date: today
 format:
   html:
     toc-title: "Contenidos"
-    theme: cosmo
+    theme: flatly
     toc: true
     toc-depth: 3
     number-sections: true
@@ -38,7 +38,6 @@ citation-location: margin
 
 ## Cargar paquete de datos.
 
-
 ```{r}
 #| message: false
 #| warning: false
@@ -46,7 +45,6 @@ citation-location: margin
 library(dplyr) # manipulación de datos
 library(readxl) # carga de archivos Excel
 ```
-
 
 ```{r}
 censo <- read_excel("bbdd/censo_proyeccion_2024.xlsx")
@@ -85,7 +83,6 @@ censo |>
   arrange(población) |>
   select(comuna, población)
 ```
-
 
 ```{r}
 censo |> 
@@ -175,5 +172,3 @@ censo |>
   slice_max(población) |> 
   select(region, comuna, población)
 ```
-
-

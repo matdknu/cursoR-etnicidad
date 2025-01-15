@@ -1,5 +1,5 @@
 ---
-title: "Mapas en R" 
+title: "Mapas y Censo 2017 en R" 
 subtitle: "InteRculturales"
 author: "Matías Deneken"
 date: today
@@ -47,6 +47,11 @@ options(message = FALSE)  # Ocultar mensajes
 #### Cargar paquetes
 
 ```{r}
+#| warning: false
+#| message: false
+#| cache: false
+#| results: false
+
 library(chilemapas) # mapas de chile
 library(dplyr) # manipulación de datos
 library(ggplot2) # visualización de datos
@@ -272,11 +277,158 @@ mapa_regiones_2 |>
 
 # Censo 2017
 
-# Encuesta Longitudinal de Relaciones Interculturales (ELRI)
 
-Carga de datos
 
 ```{r}
+#install.packages('censo2017')
+library(censo2017)
+```
+
+
+```{r}
+#| warning: false
+#| message: false
+#| cache: false
+#| results: false
+# cargar bbdd
+
+censo_descargar()
+```
+
+
+```{r}
+# con la bbdd instalada
+
+variables <- censo_tabla("variables")
+variables_codificacion <- censo_tabla("variables_codificacion")
+```
+
+
+```{r}
+variables
+
+variables %>% filter(variable == "p16")
+variables %>% filter(variable == "p16a")
+```
+
+
+```{r}
+indigena_total <- tbl(censo_conectar(), "zonas") %>% 
+  mutate(
+    region = substr(as.character(geocodigo), 1, 2),
+    comuna = substr(as.character(geocodigo), 1, 5)
+  ) %>% 
+  #filter(region == "08") %>% 
+  select(comuna, geocodigo, zonaloc_ref_id, region) %>%
+  inner_join(select(tbl(censo_conectar(), "viviendas"), zonaloc_ref_id, vivienda_ref_id), by = "zonaloc_ref_id") %>%
+  inner_join(select(tbl(censo_conectar(), "hogares"), vivienda_ref_id, hogar_ref_id), by = "vivienda_ref_id") %>%
+  inner_join(select(tbl(censo_conectar(), "personas"), hogar_ref_id, indigena = p16), by = "hogar_ref_id") %>%
+  collect()
+```
+
+
+```{r}
+indigena_total <- indigena_total %>% 
+  group_by(comuna, indigena) %>%
+  summarise(cuenta = n()) %>%
+  group_by(comuna) %>%
+  mutate(proporcion = cuenta / sum(cuenta))
+```
+
+
+```{r}
+mapa <- mapa_comunas %>% 
+  filter(codigo_comuna != "05201") %>% 
+  filter(codigo_comuna != "05103") %>% 
+  filter(codigo_comuna != "05104") %>% 
+  left_join(indigena_total, by = c("codigo_comuna" = "comuna"))
+```
+
+
+```{r}
+colors <- c("#DCA761","#C6C16D","#8B9C94","#628CA5","#b8c5cf")
+
+g <- ggplot() +
+  geom_sf(data = mapa %>% 
+            select(codigo_comuna, geometry) %>% 
+            left_join(
+              mapa %>% 
+                filter(indigena == 1) %>% 
+                select(codigo_comuna, indigena, proporcion),
+              by = "codigo_comuna"
+            ),
+          aes(fill = proporcion, geometry = geometry),
+          size = 0.1) +
+  #geom_sf_label(aes(label = comuna, geometry = geometry)) +
+  scale_fill_gradientn(colours = rev(colors), name = "Porcentaje") +
+  labs(title = "% de Habitantes Indígenas",
+       subtitle = "Chile continental") +
+  theme_minimal(base_size = 16)
+
+g
+
+#ggsave("img/poblacionindigena_(0)total.png", width = 32, height = 25, units = "cm")
+```
+
+#### Caso práctico: Región de Atacama.
+
+```{r}
+indigena_reg3 <- tbl(censo_conectar(), "zonas") %>% 
+  mutate(
+    region = substr(as.character(geocodigo), 1, 2),
+    comuna = substr(as.character(geocodigo), 1, 5)
+  ) %>% 
+  filter(region == "03") %>% #Añadimos un Filtro
+  select(comuna, geocodigo, zonaloc_ref_id, region) %>%
+  inner_join(select(tbl(censo_conectar(), "viviendas"), zonaloc_ref_id, vivienda_ref_id), by = "zonaloc_ref_id") %>%
+  inner_join(select(tbl(censo_conectar(), "hogares"), vivienda_ref_id, hogar_ref_id), by = "vivienda_ref_id") %>%
+  inner_join(select(tbl(censo_conectar(), "personas"), hogar_ref_id, indigena = p16), by = "hogar_ref_id") %>%
+  collect()
+```
+
+
+```{r}
+indigena_reg3 <- indigena_reg3 %>% 
+  group_by(comuna, indigena) %>%
+  summarise(cuenta = n()) %>%
+  group_by(comuna) %>%
+  mutate(proporcion = cuenta / sum(cuenta)); indigena_reg3
+```
+
+
+```{r}
+mapa_atacama <- mapa_comunas %>% 
+  filter(codigo_region == "03") %>% 
+  left_join(indigena_reg3, by = c("codigo_comuna" = "comuna"))
+
+
+colors <- c("#DCA761","#C6C16D","#8B9C94","#628CA5","#b8c5cf")
+
+g <- ggplot() +
+  geom_sf(data = mapa_atacama %>% 
+            select(codigo_comuna, geometry) %>% 
+            left_join(
+              mapa_atacama %>% 
+                filter(indigena == 1) %>% 
+                select(codigo_comuna, indigena, proporcion),
+              by = "codigo_comuna"
+            ),
+          aes(fill = proporcion, geometry = geometry),
+          size = 0.1) +
+  #geom_sf_label(aes(label = comuna, geometry = geometry)) +
+  scale_fill_gradientn(colours = rev(colors), name = "Porcentaje") +
+  labs(title = "(%) Habitantes autoidentificados como indígenas",
+       subtitle = "Región de Atacama") +
+  theme_minimal(base_size = 11)
+
+g
+```
+
+# Encuesta Longitudinal de Relaciones Interculturales (ELRI)
+
+
+```{r}
+
 library(haven)
 library(ggrepel)
 
@@ -286,7 +438,7 @@ elri <- read_dta("/Users/matdknu/Dropbox/CIIR/Encuesta-ELRI/BBDD/BBDD_ELRI_LONG_
 
 Procesamiento de datos
 
-```{r data-processing}
+```{r}
 elri_mapa <- elri |> 
   select(comuna) |> 
   rename(codigo_comuna = comuna) |> 
@@ -313,13 +465,15 @@ mapa_datos_2$n[is.na(mapa_datos_2$n)] <- 0
 
 mapa_datos_2 <- mapa_datos_2 |> 
   mutate(dummy = if_else(n == 0, "Comuna NO encuestada", "Comuna encuestada"))
+```
 
+
+```{r data-processing}
 # Calcular las coordenadas y filtrar fuera de geom_text_repel
 mapa_datos_2 <- mapa_datos_2 |> 
   filter(nombre_comuna != "Isla de Pascua", nombre_comuna != "Juan Fernandez") |> 
   mutate(centroid = st_centroid(geometry)) |> 
   mutate(x = st_coordinates(centroid)[,1], y = st_coordinates(centroid)[,2])
-
 ```
 
 ```{r}
@@ -330,7 +484,7 @@ datos_arica <- mapa_datos_2 |> filter(nombre_comuna == "Arica"| nombre_comuna ==
                                       nombre_comuna == "Tierra Amarilla")
 ```
 
-Visualización del mapa
+Visualización del mapa con sus respectivas etiquetas.
 
 ```{r plot-map}
 g1 <- mapa_datos_2 |> 
