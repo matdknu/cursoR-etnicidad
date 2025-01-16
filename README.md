@@ -17,7 +17,7 @@ A lo largo del Seminario, los participantes aprenderán a aplicar metodologías 
 Inscripciones aquí: *Pronto*
 
 | Fecha | Contenido                                                         | Código práctico                                                                    | Ejercicios | Packages                           | Referencias                                                                |
-|-------|-------------------------------------------------------------------|------------------------------------------------------------------------------------|------------|------------------------------------|----------------------------------------------------------------------------|
+|-----------|-----------|---------------|-----------|-----------|-------------|
 | 1     | Introducción al uso de R: Procesamiento de datos con Tidyverse I  | [Práctico 1](https://matdknu.github.io/cursoR-etnicidad/clases/clase1/clase1.html) |            | `Tidyverse`                        | [An Introduction to R](https://intro2r.com "An Introduction to R [Libro]") |
 | 2     | Introducción al uso de R: Procesamiento de datos con Tidyverse II | [Práctico 2](https://matdknu.github.io/cursoR-etnicidad/clases/clase2/clase2.html) |            | `Tidyverse`                        | [R For Data Science](https://r4ds.had.co.nz/ "R For Data Science")         |
 | 3     | Introducción a la visualización de datos: Uso de Ggplot2          | [Práctico 3](https://matdknu.github.io/cursoR-etnicidad/clases/clase3/clase3.html) |            | `Tidyverse`, `Ggplot2`             | [R For Data Science](https://r4ds.had.co.nz/ "R For Data Science")         |
@@ -28,3 +28,25 @@ Inscripciones aquí: *Pronto*
 | 8     | Uso de IA generativa                                              | [Práctico 8](https://matdknu.github.io/cursoR-etnicidad/clases/clase8/clase8.html) |            |                                    | [Documentación OpenAI](https://platform.openai.com/docs/)                  |
 
 ![](img/curso-R-programming.png){width="701"}
+
+## A seguir en GitHub...
+
+Personas chilenas que tienen un contenido de R y Pyhon interesante:
+
+-   [\@bastianolea](https://github.com/bastianolea)
+
+-   [\@rivaquiroga](https://github.com/rivaquiroga/)
+
+-   [\@pachadotdev](https://github.com/pachadotdev)
+
+-   @[robsalasco](https://github.com/robsalasco)
+
+-   [\@mebucca](www.github.com/mebucca)
+
+Personas a lo largo del mundo.
+
+-   [\@juliasilge](https://github.com/)
+
+-   [\@hadley](https://github.com/hadley)
+
+-   [\@yihui](https://github.com/yihui)
