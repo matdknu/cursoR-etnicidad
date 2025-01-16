@@ -39,7 +39,7 @@ Personas chilenas que tienen un contenido de R y Pyhon interesante:
 
 -   [\@pachadotdev](https://github.com/pachadotdev)
 
--   @[robsalasco](https://github.com/robsalasco)
+-   [\@robsalasco](https://github.com/robsalasco)
 
 -   [\@mebucca](www.github.com/mebucca)
 
