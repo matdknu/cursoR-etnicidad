@@ -41,7 +41,7 @@ Personas chilenas que tienen un contenido de R y Pyhon interesante:
 
 -   [\@robsalasco](https://github.com/robsalasco)
 
--   [\@mebucca](www.github.com/mebucca)
+-   [\@mebucca](https://github.com/mebucca)
 
 Personas a lo largo del mundo.
 
