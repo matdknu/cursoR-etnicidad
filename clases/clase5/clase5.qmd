@@ -277,13 +277,10 @@ mapa_regiones_2 |>
 
 # Censo 2017
 
-
-
 ```{r}
 #install.packages('censo2017')
 library(censo2017)
 ```
-
 
 ```{r}
 #| warning: false
@@ -295,7 +292,6 @@ library(censo2017)
 censo_descargar()
 ```
 
-
 ```{r}
 # con la bbdd instalada
 
@@ -303,14 +299,12 @@ variables <- censo_tabla("variables")
 variables_codificacion <- censo_tabla("variables_codificacion")
 ```
 
-
 ```{r}
 variables
 
 variables %>% filter(variable == "p16")
 variables %>% filter(variable == "p16a")
 ```
-
 
 ```{r}
 indigena_total <- tbl(censo_conectar(), "zonas") %>% 
@@ -326,7 +320,6 @@ indigena_total <- tbl(censo_conectar(), "zonas") %>%
   collect()
 ```
 
-
 ```{r}
 indigena_total <- indigena_total %>% 
   group_by(comuna, indigena) %>%
@@ -335,7 +328,6 @@ indigena_total <- indigena_total %>%
   mutate(proporcion = cuenta / sum(cuenta))
 ```
 
-
 ```{r}
 mapa <- mapa_comunas %>% 
   filter(codigo_comuna != "05201") %>% 
@@ -343,7 +335,6 @@ mapa <- mapa_comunas %>%
   filter(codigo_comuna != "05104") %>% 
   left_join(indigena_total, by = c("codigo_comuna" = "comuna"))
 ```
-
 
 ```{r}
 colors <- c("#DCA761","#C6C16D","#8B9C94","#628CA5","#b8c5cf")
@@ -386,7 +377,6 @@ indigena_reg3 <- tbl(censo_conectar(), "zonas") %>%
   collect()
 ```
 
-
 ```{r}
 indigena_reg3 <- indigena_reg3 %>% 
   group_by(comuna, indigena) %>%
@@ -394,7 +384,6 @@ indigena_reg3 <- indigena_reg3 %>%
   group_by(comuna) %>%
   mutate(proporcion = cuenta / sum(cuenta)); indigena_reg3
 ```
-
 
 ```{r}
 mapa_atacama <- mapa_comunas %>% 
@@ -425,7 +414,6 @@ g
 ```
 
 # Encuesta Longitudinal de Relaciones Interculturales (ELRI)
-
 
 ```{r}
 
@@ -466,7 +454,6 @@ mapa_datos_2$n[is.na(mapa_datos_2$n)] <- 0
 mapa_datos_2 <- mapa_datos_2 |> 
   mutate(dummy = if_else(n == 0, "Comuna NO encuestada", "Comuna encuestada"))
 ```
-
 
 ```{r data-processing}
 # Calcular las coordenadas y filtrar fuera de geom_text_repel
