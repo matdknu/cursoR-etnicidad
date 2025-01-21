@@ -1,6 +1,6 @@
 ![](img/curso-r1.png)
 
-# Seminario Cuantitativo...
+# Seminario Cuantitativo
 
 # ***InteRculturales:** Técnicas de ciencias sociales computacionales desde la relaciones interculturales.*
 
