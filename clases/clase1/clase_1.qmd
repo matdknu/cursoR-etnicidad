@@ -36,4 +36,6 @@ reference-location: margin
 citation-location: margin
 ---
 
-# Introducció 
+# Introducción
+
+Bienvenidos al taller metodológico sobre ciencias sociales computacionales
