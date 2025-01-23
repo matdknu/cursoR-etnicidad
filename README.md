@@ -27,7 +27,7 @@ Inscripciones aquí: *Pronto*
 | *Comming soon* | Procesamiento de datos con Pandas (Python)                        | [Presentación 7](https://matdknu.github.io/inteRculturales/clases/clase1/pres/presentacion-1.html) | [Práctico 7](https://matdknu.github.io/cursoR-etnicidad/clases/clase7/clase7.html)  | `Pandas`                           | [Guía de Uso PANDAS](https://pandas.pydata.org/docs/user_guide/index.html) |
 | *Comming soon* | Uso de IA generativa                                              | [Presentación 8](https://matdknu.github.io/inteRculturales/clases/clase1/pres/presentacion-1.html) | [Práctico 8](https://matdknu.github.io/cursoR-etnicidad/clases/clase8/clase8.html)  |                                    | [Documentación OpenAI](https://platform.openai.com/docs/)                  |
 
-![](img/curso-R-programming.png){width="701"}
+![](img/curso-R-programming.png)
 
 ## A seguir en GitHub...
 
