@@ -290,7 +290,11 @@ class: left middle
 
 .full-width[.content-box-purple[
 .bolder[]
-"La verdad se encuentra directamente frente a nosotros en la realidad que nos rodea. Sin embargo, no podemos usarla tal como es. Una descripción ininterrumpida de la realidad sería simultáneamente la cosa más verdadera y más inútil del mundo, y ciertamente no sería ciencia." **Jakob von Uexküll**
+Bienvenidos al taller metodológico!
+Esperamos que este espacio sea nutritivo para su aprendizaje y que sea un lugar en el cuál podamos discutir sobre las implicancias del uso de técnicas computacionales para la investigación social. 
+
+El taller se estructura en dos partes: Presentación, con una introducción a los conceptos fundamentales de la sesión,  y un código práctico en el cuál aplicaremos lo aprendido. 
+
 ]]
 
 
@@ -304,6 +308,6 @@ background-image: url('d-koi-GQJY4UPR21U-unsplash.jpg')
 background-size: cover
 
 # **Muchas Gracias**
-### **Esta presentación fue realizada con el paquete  [Xaringan](https://slides.yihui.org/xaringan), diseñado para entorno  [R](https://www.r-project.org/)** 
+### **Vamos al código!** 
 
 
