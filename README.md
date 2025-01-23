@@ -4,6 +4,8 @@
 
 # ***InteRculturales:** Técnicas de ciencias sociales computacionales desde la relaciones interculturales.*
 
+**Horario: A definir.**
+
 La unidad de estudios cuantitativos del Centro de Estudios Interculturales e Indígenas (CIIR) invita a participar en el seminario cuantitativo abierto:
 
 InteRculturales: Técnicas de ciencias sociales computacionales desde la las relaciones interculturales.
